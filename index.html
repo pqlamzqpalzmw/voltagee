@@ -100,6 +100,8 @@ body {
 
   backdrop-filter: blur(10px);
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.35);
+
+  max-width: calc(100vw - 20px);
 }
 
 .media-button {
@@ -121,6 +123,8 @@ body {
   font-size: 13px;
 
   transition: all 0.2s;
+
+  flex-shrink: 0;
 }
 
 .media-button:hover {
@@ -133,6 +137,7 @@ body {
   width: 1px;
   height: 22px;
   background: rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
 }
 
 .media-label {
@@ -179,11 +184,47 @@ body {
   cursor: pointer;
 }
 
-#music-status {
+#music-status,
+#video-status {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.55);
   min-width: 35px;
   text-align: center;
+}
+
+.music-cover {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.music-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 125px;
+  max-width: 150px;
+  overflow: hidden;
+}
+
+#music-title {
+  font-size: 10px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#music-artist {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* =========================
@@ -1062,31 +1103,52 @@ body {
   .media-controls {
     bottom: 12px;
 
-    gap: 7px;
+    gap: 5px;
 
     padding:
-      6px 9px;
+      6px 8px;
+
+    border-radius: 18px;
   }
 
   .media-button {
-    width: 28px;
-    height: 28px;
+    width: 27px;
+    height: 27px;
 
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .media-label {
-    font-size: 8px;
-
-    min-width: 35px;
+    font-size: 7px;
+    min-width: 30px;
   }
 
   .media-slider {
-    width: 55px;
+    width: 45px;
   }
 
-  #music-status {
-    font-size: 9px;
+  #music-status,
+  #video-status {
+    font-size: 8px;
+    min-width: 25px;
+  }
+
+  .music-cover {
+    width: 32px;
+    height: 32px;
+  }
+
+  .music-info {
+    min-width: 75px;
+    max-width: 90px;
+  }
+
+  #music-title {
+    font-size: 8px;
+  }
+
+  #music-artist {
+    font-size: 7px;
   }
 
   #start-text {
@@ -1113,7 +1175,10 @@ body {
 
 <div class="container">
 
-  <!-- BACKGROUND VIDEO -->
+  <!-- =========================
+       BACKGROUND VIDEO
+  ========================= -->
+
   <video
     id="background"
     autoplay
@@ -1128,12 +1193,13 @@ body {
     >
   </video>
 
-  <!-- MUSIC -->
+  <!-- =========================
+       MUSIC PLAYER
+  ========================= -->
+
   <audio
     id="music-player"
-    src="assets/music.mp3"
-    loop
-    preload="auto"
+    preload="metadata"
   ></audio>
 
   <div class="glitch-overlay"></div>
@@ -1617,8 +1683,11 @@ body {
       <div class="resume-entry">
 
         <div class="resume-entry-title">
+
           Current Management &amp; Moderation
+
           &nbsp;
+
           <span
             style="
               font-weight:400;
@@ -1628,6 +1697,7 @@ body {
           >
             2+ years
           </span>
+
         </div>
 
         <div class="resume-entry-body">
@@ -1695,7 +1765,40 @@ body {
 
   <div class="media-controls">
 
-    <!-- MUSIC -->
+    <!-- MUSIC COVER -->
+
+    <img
+      id="music-cover"
+      class="music-cover"
+      src="assets/music/cover1.jpg"
+      alt="Album Cover"
+    >
+
+    <!-- MUSIC INFO -->
+
+    <div class="music-info">
+
+      <div id="music-title">
+        STAY HERE 4 LIFE (feat. Brent Faiyaz)
+      </div>
+
+      <div id="music-artist">
+        A$AP ROCKY
+      </div>
+
+    </div>
+
+    <!-- PREVIOUS -->
+
+    <button
+      id="music-prev"
+      class="media-button"
+      title="Previous Song"
+    >
+      ⏮
+    </button>
+
+    <!-- PLAY / PAUSE -->
 
     <button
       id="music-toggle"
@@ -1705,9 +1808,21 @@ body {
       ▶
     </button>
 
+    <!-- NEXT -->
+
+    <button
+      id="music-next"
+      class="media-button"
+      title="Next Song"
+    >
+      ⏭
+    </button>
+
     <span class="media-label">
       MUSIC
     </span>
+
+    <!-- MUSIC VOLUME -->
 
     <input
       id="music-volume"
@@ -1740,6 +1855,8 @@ body {
       VIDEO
     </span>
 
+    <!-- VIDEO VOLUME -->
+
     <input
       id="video-volume"
       class="media-slider"
@@ -1756,6 +1873,10 @@ body {
     </span>
 
   </div>
+
+  <!-- =========================
+       RESULTS BUTTON
+  ========================= -->
 
   <div
     id="results-button-container"
@@ -1779,7 +1900,10 @@ body {
 
 </div>
 
-<!-- THEME BUTTONS -->
+<!-- =========================
+     THEME BUTTONS
+========================= -->
+
 <div
   class="controls"
   style="
@@ -1825,9 +1949,17 @@ body {
 
 </div>
 
+<!-- =========================
+     GSAP
+========================= -->
+
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
 ></script>
+
+<!-- =========================
+     YOUR SCRIPT
+========================= -->
 
 <script src="script.js"></script>
 
