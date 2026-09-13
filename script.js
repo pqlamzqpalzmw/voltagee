@@ -45,6 +45,12 @@ function initMedia() {
     return;
   }
 
+  /*
+   * Before the user clicks the start screen,
+   * keep the video muted so the browser allows
+   * the background video to autoplay.
+   */
+
   backgroundVideo.muted = true;
   backgroundVideo.volume = 0.5;
 
@@ -56,7 +62,13 @@ function initMedia() {
   });
 
   if (musicPlayer) {
-    musicPlayer.volume = 0.5;
+
+    /*
+     * Music will start at 25% after
+     * the user clicks the start screen.
+     */
+
+    musicPlayer.volume = 0.25;
     musicPlayer.pause();
   }
 }
@@ -226,6 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * If the song has already played for
      * more than 3 seconds, restart it.
      */
+
     if (musicPlayer.currentTime > 3) {
 
       musicPlayer.currentTime = 0;
@@ -324,10 +337,14 @@ document.addEventListener('DOMContentLoaded', () => {
    * Load first song.
    */
 
-  musicPlayer.volume =
-    parseFloat(
-      musicVolume.value
-    );
+  musicPlayer.volume = 0.25;
+
+  /*
+   * Make the slider show 25%
+   * when the site first loads.
+   */
+
+  musicVolume.value = 0.25;
 
   formatSong(
     currentSongIndex
@@ -420,13 +437,17 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
 
-  backgroundVideo.volume =
-    parseFloat(
-      videoVolume.value
-    );
+  /*
+   * Initial video volume is 50%.
+   * It starts muted until the user
+   * clicks the start screen.
+   */
 
-  backgroundVideo.muted =
-    true;
+  backgroundVideo.volume = 0.50;
+
+  videoVolume.value = 0.50;
+
+  backgroundVideo.muted = true;
 
   updateVideoUI();
 
@@ -672,7 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* =========================
      ENTER SITE
-  ========================= */
+========================= */
 
   let siteEntered = false;
 
@@ -682,37 +703,95 @@ document.addEventListener('DOMContentLoaded', () => {
     if (siteEntered) return;
 
     siteEntered = true;
-    hasUserInteracted = true;
-
-    startScreen.classList.add(
-      'hidden'
-    );
 
     /*
-     * Video remains muted on entry.
-     * User can turn it on manually.
+     * This click counts as user interaction,
+     * so browsers allow audio to start.
      */
 
-    backgroundVideo.muted =
-      true;
+    hasUserInteracted = true;
 
-    backgroundVideo.volume =
-      parseFloat(
-        videoVolume.value
-      );
 
-    backgroundVideo.loop =
-      true;
+    /* =========================
+       START MUSIC AT 25%
+    ========================= */
 
-    backgroundVideo.play().catch(
-      err => {
+    musicPlayer.volume = 0.25;
+
+    musicVolume.value = 0.25;
+
+    musicPlayer.play()
+      .then(() => {
+
+        musicToggle.textContent =
+          'Ⅱ';
+
+        updateMusicUI();
+
+      })
+      .catch(err => {
+
         console.error(
-          'Failed to play video:',
+          'Failed to start music:',
           err
         );
+
+      });
+
+
+    /* =========================
+       START VIDEO AT 50%
+    ========================= */
+
+    backgroundVideo.volume = 0.50;
+
+    videoVolume.value = 0.50;
+
+    backgroundVideo.muted = false;
+
+    backgroundVideo.loop = true;
+
+    backgroundVideo.play()
+      .then(() => {
+
+        updateVideoUI();
+
+      })
+      .catch(err => {
+
+        console.error(
+          'Failed to start video:',
+          err
+        );
+
+      });
+
+
+    /* =========================
+       HIDE START SCREEN
+    ========================= */
+
+    gsap.to(
+      startScreen,
+      {
+        opacity: 0,
+        duration: 0.5,
+
+        onComplete: () => {
+
+          startScreen.classList.add(
+            'hidden'
+          );
+
+        }
+
       }
     );
 
+
+    /* =========================
+       SHOW PROFILE
+    ========================= */
 
     profileBlock.classList.remove(
       'hidden'
@@ -1160,8 +1239,10 @@ document.addEventListener('DOMContentLoaded', () => {
           backgroundVideo.loop =
             true;
 
+
           /*
-           * Preserve video audio settings.
+           * Preserve video audio settings
+           * when changing themes.
            */
 
           backgroundVideo.muted =
