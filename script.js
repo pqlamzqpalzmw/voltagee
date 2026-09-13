@@ -1,6 +1,39 @@
 let hasUserInteracted = false;
 
+/* =========================
+   MUSIC LIBRARY
+========================= */
+
+const songs = [
+  {
+    title: 'STAY HERE 4 LIFE (feat. Brent Faiyaz)',
+    artist: 'A$AP ROCKY',
+    src: 'assets/music/stayhere.mp3',
+    cover: 'assets/music/cover1.jpg'
+  },
+  {
+    title: 'Passionfruit',
+    artist: 'Drake',
+    src: 'assets/music/passionfruit.mp3',
+    cover: 'assets/music/cover2.jpg'
+  },
+  {
+    title: 'Headlines',
+    artist: 'Drake',
+    src: 'assets/music/headlines.mp3',
+    cover: 'assets/music/cover3.jpg'
+  }
+];
+
+let currentSongIndex = 0;
+
+
+/* =========================
+   INITIAL MEDIA
+========================= */
+
 function initMedia() {
+
   const backgroundVideo =
     document.getElementById('background');
 
@@ -12,10 +45,6 @@ function initMedia() {
     return;
   }
 
-  /*
-   * VIDEO STARTS MUTED
-   * This allows autoplay to work reliably.
-   */
   backgroundVideo.muted = true;
   backgroundVideo.volume = 0.5;
 
@@ -26,9 +55,6 @@ function initMedia() {
     );
   });
 
-  /*
-   * MUSIC STARTS PAUSED
-   */
   if (musicPlayer) {
     musicPlayer.volume = 0.5;
     musicPlayer.pause();
@@ -36,11 +62,11 @@ function initMedia() {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
+/* =========================
+   DOM
+========================= */
 
-  /* =========================
-     ELEMENTS
-  ========================= */
+document.addEventListener('DOMContentLoaded', () => {
 
   const startScreen =
     document.getElementById('start-screen');
@@ -66,20 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const profileBlock =
     document.getElementById('profile-block');
 
-  const resumeBlock =
-    document.getElementById('resume-block');
-
   const profilePicture =
     document.querySelector('.profile-picture');
 
   const profileContainer =
     document.querySelector('.profile-container');
-
-  const socialIcons =
-    document.querySelectorAll('.social-icon');
-
-  const badges =
-    document.querySelectorAll('.badge');
 
   const glitchOverlay =
     document.querySelector('.glitch-overlay');
@@ -93,12 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultsButtonContainer =
     document.getElementById('results-button-container');
 
-  const resultsButton =
-    document.getElementById('results-theme');
-
-  const resultsHint =
-    document.getElementById('results-hint');
-
 
   /* =========================
      MEDIA CONTROLS
@@ -107,11 +118,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const musicToggle =
     document.getElementById('music-toggle');
 
+  const musicPrev =
+    document.getElementById('music-prev');
+
+  const musicNext =
+    document.getElementById('music-next');
+
   const musicVolume =
     document.getElementById('music-volume');
 
   const musicStatus =
     document.getElementById('music-status');
+
+  const musicCover =
+    document.getElementById('music-cover');
+
+  const musicTitle =
+    document.getElementById('music-title');
+
+  const musicArtist =
+    document.getElementById('music-artist');
 
   const videoMute =
     document.getElementById('video-mute');
@@ -123,72 +149,159 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('video-status');
 
 
-  /*
-   * MUSIC
-   */
+  /* =========================
+     MUSIC PLAYER
+  ========================= */
 
-  musicPlayer.volume =
-    parseFloat(musicVolume.value);
+  function formatSong(index) {
 
-  function updateMusicUI() {
+    const song =
+      songs[index];
 
-    if (musicPlayer.paused) {
+    musicPlayer.src =
+      song.src;
 
-      musicToggle.textContent = '▶';
+    musicCover.src =
+      song.cover;
 
-    } else {
+    musicCover.alt =
+      `${song.title} album cover`;
 
-      musicToggle.textContent = 'Ⅱ';
+    musicTitle.textContent =
+      song.title;
 
-    }
+    musicArtist.textContent =
+      song.artist;
 
-    musicStatus.textContent =
-      Math.round(musicPlayer.volume * 100) + '%';
+    musicPlayer.currentTime = 0;
+
+    updateMusicUI();
   }
 
 
-  musicToggle.addEventListener('click', () => {
+  function updateMusicUI() {
+
+    musicToggle.textContent =
+      musicPlayer.paused
+        ? '▶'
+        : 'Ⅱ';
+
+    musicStatus.textContent =
+      Math.round(
+        musicPlayer.volume * 100
+      ) + '%';
+  }
+
+
+  function playSong() {
 
     hasUserInteracted = true;
 
-    if (musicPlayer.paused) {
+    musicPlayer.play().catch(err => {
 
-      musicPlayer.play().catch(err => {
+      console.error(
+        'Could not start music:',
+        err
+      );
 
-        console.error(
-          'Could not start music:',
-          err
-        );
+    });
+  }
 
-      });
 
-    } else {
+  function nextSong() {
 
-      musicPlayer.pause();
+    currentSongIndex =
+      (currentSongIndex + 1) %
+      songs.length;
 
+    formatSong(currentSongIndex);
+
+    playSong();
+  }
+
+
+  function previousSong() {
+
+    /*
+     * If the song has already played for
+     * more than 3 seconds, restart it.
+     */
+    if (musicPlayer.currentTime > 3) {
+
+      musicPlayer.currentTime = 0;
+
+      return;
     }
 
-    updateMusicUI();
-  });
+    currentSongIndex =
+      (
+        currentSongIndex -
+        1 +
+        songs.length
+      ) %
+      songs.length;
+
+    formatSong(currentSongIndex);
+
+    playSong();
+  }
 
 
-  musicVolume.addEventListener('input', () => {
+  musicToggle.addEventListener(
+    'click',
+    () => {
 
-    const volume =
-      parseFloat(musicVolume.value);
+      hasUserInteracted = true;
 
-    musicPlayer.volume = volume;
+      if (musicPlayer.paused) {
 
-    musicStatus.textContent =
-      Math.round(volume * 100) + '%';
+        playSong();
 
-  });
+      } else {
+
+        musicPlayer.pause();
+
+      }
+
+    }
+  );
+
+
+  musicNext.addEventListener(
+    'click',
+    nextSong
+  );
+
+
+  musicPrev.addEventListener(
+    'click',
+    previousSong
+  );
+
+
+  musicVolume.addEventListener(
+    'input',
+    () => {
+
+      const volume =
+        parseFloat(
+          musicVolume.value
+        );
+
+      musicPlayer.volume =
+        volume;
+
+      updateMusicUI();
+
+    }
+  );
 
 
   musicPlayer.addEventListener(
     'play',
     updateMusicUI
   );
+
 
   musicPlayer.addEventListener(
     'pause',
@@ -197,67 +310,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /*
-   * VIDEO MUTE
+   * Automatically move to the
+   * next song when one ends.
    */
 
-  videoMute.addEventListener('click', () => {
-
-    hasUserInteracted = true;
-
-    backgroundVideo.muted =
-      !backgroundVideo.muted;
-
-    updateVideoUI();
-
-    /*
-     * If video was muted and is now unmuted,
-     * make sure the video is playing.
-     */
-    if (!backgroundVideo.muted) {
-
-      backgroundVideo.play().catch(err => {
-
-        console.error(
-          'Could not play video:',
-          err
-        );
-
-      });
-
-    }
-
-  });
+  musicPlayer.addEventListener(
+    'ended',
+    nextSong
+  );
 
 
   /*
-   * VIDEO VOLUME
+   * Load first song.
    */
 
-  videoVolume.addEventListener('input', () => {
+  musicPlayer.volume =
+    parseFloat(
+      musicVolume.value
+    );
 
-    const volume =
-      parseFloat(videoVolume.value);
+  formatSong(
+    currentSongIndex
+  );
 
-    backgroundVideo.volume = volume;
 
-    /*
-     * Setting volume above zero should
-     * automatically unmute the video.
-     */
-    if (volume > 0) {
-
-      backgroundVideo.muted = false;
-
-    } else {
-
-      backgroundVideo.muted = true;
-
-    }
-
-    updateVideoUI();
-
-  });
-
+  /* =========================
+     VIDEO CONTROLS
+  ========================= */
 
   function updateVideoUI() {
 
@@ -266,11 +345,13 @@ document.addEventListener('DOMContentLoaded', () => {
       backgroundVideo.volume === 0
     ) {
 
-      videoMute.textContent = '🔇';
+      videoMute.textContent =
+        '🔇';
 
     } else {
 
-      videoMute.textContent = '🔊';
+      videoMute.textContent =
+        '🔊';
 
     }
 
@@ -281,20 +362,72 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  /*
-   * INITIAL MEDIA UI
-   */
+  videoMute.addEventListener(
+    'click',
+    () => {
+
+      hasUserInteracted = true;
+
+      backgroundVideo.muted =
+        !backgroundVideo.muted;
+
+      if (!backgroundVideo.muted) {
+
+        backgroundVideo.play().catch(
+          err => {
+            console.error(
+              'Could not play video:',
+              err
+            );
+          }
+        );
+
+      }
+
+      updateVideoUI();
+
+    }
+  );
+
+
+  videoVolume.addEventListener(
+    'input',
+    () => {
+
+      const volume =
+        parseFloat(
+          videoVolume.value
+        );
+
+      backgroundVideo.volume =
+        volume;
+
+      if (volume > 0) {
+
+        backgroundVideo.muted =
+          false;
+
+      } else {
+
+        backgroundVideo.muted =
+          true;
+
+      }
+
+      updateVideoUI();
+
+    }
+  );
+
 
   backgroundVideo.volume =
-    parseFloat(videoVolume.value);
+    parseFloat(
+      videoVolume.value
+    );
 
-  /*
-   * Keep autoplay muted.
-   * User can click the speaker to enable it.
-   */
-  backgroundVideo.muted = true;
+  backgroundVideo.muted =
+    true;
 
-  updateMusicUI();
   updateVideoUI();
 
 
@@ -303,7 +436,9 @@ document.addEventListener('DOMContentLoaded', () => {
   ========================= */
 
   const cursor =
-    document.querySelector('.custom-cursor');
+    document.querySelector(
+      '.custom-cursor'
+    );
 
   const isTouchDevice =
     window.matchMedia(
@@ -319,9 +454,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener(
       'touchstart',
-      (e) => {
+      e => {
 
-        const touch = e.touches[0];
+        const touch =
+          e.touches[0];
 
         cursor.style.left =
           touch.clientX + 'px';
@@ -337,9 +473,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener(
       'touchmove',
-      (e) => {
+      e => {
 
-        const touch = e.touches[0];
+        const touch =
+          e.touches[0];
 
         cursor.style.left =
           touch.clientX + 'px';
@@ -367,7 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener(
       'mousemove',
-      (e) => {
+      e => {
 
         cursor.style.left =
           e.clientX + 'px';
@@ -448,20 +585,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  setInterval(() => {
+  setInterval(
+    () => {
 
-    startCursorVisible =
-      !startCursorVisible;
+      startCursorVisible =
+        !startCursorVisible;
 
-    startText.textContent =
-      startTextContent +
-      (
-        startCursorVisible
-          ? '|'
-          : ' '
-      );
+      startText.textContent =
+        startTextContent +
+        (
+          startCursorVisible
+            ? '|'
+            : ' '
+        );
 
-  }, 500);
+    },
+    500
+  );
 
 
   /* =========================
@@ -487,7 +627,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
 
       totalVisitors =
-        parseInt(totalVisitors);
+        parseInt(
+          totalVisitors
+        );
 
     }
 
@@ -515,8 +657,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    visitorCount.textContent =
-      totalVisitors.toLocaleString();
+    if (visitorCount) {
+
+      visitorCount.textContent =
+        totalVisitors.toLocaleString();
+
+    }
 
   }
 
@@ -528,8 +674,14 @@ document.addEventListener('DOMContentLoaded', () => {
      ENTER SITE
   ========================= */
 
+  let siteEntered = false;
+
+
   function enterSite() {
 
+    if (siteEntered) return;
+
+    siteEntered = true;
     hasUserInteracted = true;
 
     startScreen.classList.add(
@@ -537,15 +689,20 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     /*
-     * Video stays muted when entering.
-     * User can manually unmute it.
+     * Video remains muted on entry.
+     * User can turn it on manually.
      */
-    backgroundVideo.muted = true;
+
+    backgroundVideo.muted =
+      true;
 
     backgroundVideo.volume =
-      parseFloat(videoVolume.value);
+      parseFloat(
+        videoVolume.value
+      );
 
-    backgroundVideo.loop = true;
+    backgroundVideo.loop =
+      true;
 
     backgroundVideo.play().catch(
       err => {
@@ -574,15 +731,7 @@ document.addEventListener('DOMContentLoaded', () => {
         opacity: 1,
         y: 0,
         duration: 1,
-        ease: 'power2.out',
-
-        onComplete: () => {
-
-          profileContainer.classList.add(
-            'orbit'
-          );
-
-        }
+        ease: 'power2.out'
       }
     );
 
@@ -601,7 +750,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   startScreen.addEventListener(
     'touchstart',
-    (e) => {
+    e => {
 
       e.preventDefault();
 
@@ -622,116 +771,135 @@ document.addEventListener('DOMContentLoaded', () => {
   let nameIndex = 0;
   let isNameDeleting = false;
   let nameCursorVisible = true;
+  let nameStarted = false;
 
 
   function typeWriterName() {
 
-    if (
-      !isNameDeleting &&
-      nameIndex < name.length
-    ) {
+    if (nameStarted) return;
 
-      nameText =
-        name.slice(
-          0,
-          nameIndex + 1
+    nameStarted = true;
+
+
+    function type() {
+
+      if (
+        !isNameDeleting &&
+        nameIndex < name.length
+      ) {
+
+        nameText =
+          name.slice(
+            0,
+            nameIndex + 1
+          );
+
+        nameIndex++;
+
+      }
+
+      else if (
+        isNameDeleting &&
+        nameIndex > 0
+      ) {
+
+        nameText =
+          name.slice(
+            0,
+            nameIndex - 1
+          );
+
+        nameIndex--;
+
+      }
+
+      else if (
+        nameIndex === name.length
+      ) {
+
+        isNameDeleting =
+          true;
+
+        setTimeout(
+          type,
+          10000
         );
 
-      nameIndex++;
+        return;
 
-    }
+      }
 
-    else if (
-      isNameDeleting &&
-      nameIndex > 0
-    ) {
+      else if (
+        nameIndex === 0
+      ) {
 
-      nameText =
-        name.slice(
-          0,
-          nameIndex - 1
+        isNameDeleting =
+          false;
+
+      }
+
+
+      profileName.textContent =
+        nameText +
+        (
+          nameCursorVisible
+            ? '|'
+            : ' '
         );
 
-      nameIndex--;
 
-    }
+      if (
+        Math.random() < 0.1
+      ) {
 
-    else if (
-      nameIndex === name.length
-    ) {
-
-      isNameDeleting = true;
-
-      setTimeout(
-        typeWriterName,
-        10000
-      );
-
-      return;
-
-    }
-
-    else if (
-      nameIndex === 0
-    ) {
-
-      isNameDeleting = false;
-
-    }
-
-
-    profileName.textContent =
-      nameText +
-      (
-        nameCursorVisible
-          ? '|'
-          : ' '
-      );
-
-
-    if (
-      Math.random() < 0.1
-    ) {
-
-      profileName.classList.add(
-        'glitch'
-      );
-
-      setTimeout(() => {
-
-        profileName.classList.remove(
+        profileName.classList.add(
           'glitch'
         );
 
-      }, 200);
+        setTimeout(
+          () => {
+            profileName.classList.remove(
+              'glitch'
+            );
+          },
+          200
+        );
+
+      }
+
+
+      setTimeout(
+        type,
+        isNameDeleting
+          ? 150
+          : 300
+      );
 
     }
 
 
-    setTimeout(
-      typeWriterName,
-      isNameDeleting
-        ? 150
-        : 300
-    );
+    type();
 
   }
 
 
-  setInterval(() => {
+  setInterval(
+    () => {
 
-    nameCursorVisible =
-      !nameCursorVisible;
+      nameCursorVisible =
+        !nameCursorVisible;
 
-    profileName.textContent =
-      nameText +
-      (
-        nameCursorVisible
-          ? '|'
-          : ' '
-      );
+      profileName.textContent =
+        nameText +
+        (
+          nameCursorVisible
+            ? '|'
+            : ' '
+        );
 
-  }, 500);
+    },
+    500
+  );
 
 
   /* =========================
@@ -748,129 +916,148 @@ document.addEventListener('DOMContentLoaded', () => {
   let bioMessageIndex = 0;
   let isBioDeleting = false;
   let bioCursorVisible = true;
+  let bioStarted = false;
 
 
   function typeWriterBio() {
 
-    const currentMessage =
-      bioMessages[bioMessageIndex];
+    if (bioStarted) return;
+
+    bioStarted = true;
 
 
-    if (
-      !isBioDeleting &&
-      bioIndex <
+    function type() {
+
+      const currentMessage =
+        bioMessages[bioMessageIndex];
+
+
+      if (
+        !isBioDeleting &&
+        bioIndex <
         currentMessage.length
-    ) {
+      ) {
 
-      bioText =
-        currentMessage.slice(
-          0,
-          bioIndex + 1
+        bioText =
+          currentMessage.slice(
+            0,
+            bioIndex + 1
+          );
+
+        bioIndex++;
+
+      }
+
+      else if (
+        isBioDeleting &&
+        bioIndex > 0
+      ) {
+
+        bioText =
+          currentMessage.slice(
+            0,
+            bioIndex - 1
+          );
+
+        bioIndex--;
+
+      }
+
+      else if (
+        bioIndex ===
+        currentMessage.length
+      ) {
+
+        isBioDeleting =
+          true;
+
+        setTimeout(
+          type,
+          2000
         );
 
-      bioIndex++;
+        return;
 
-    }
+      }
 
-    else if (
-      isBioDeleting &&
-      bioIndex > 0
-    ) {
+      else if (
+        bioIndex === 0 &&
+        isBioDeleting
+      ) {
 
-      bioText =
-        currentMessage.slice(
-          0,
-          bioIndex - 1
-        );
+        isBioDeleting =
+          false;
 
-      bioIndex--;
+        bioMessageIndex =
+          (
+            bioMessageIndex + 1
+          ) %
+          bioMessages.length;
 
-    }
+      }
 
-    else if (
-      bioIndex ===
-      currentMessage.length
-    ) {
 
-      isBioDeleting = true;
-
-      setTimeout(
-        typeWriterBio,
-        2000
-      );
-
-      return;
-
-    }
-
-    else if (
-      bioIndex === 0 &&
-      isBioDeleting
-    ) {
-
-      isBioDeleting = false;
-
-      bioMessageIndex =
+      profileBio.textContent =
+        bioText +
         (
-          bioMessageIndex + 1
-        ) %
-        bioMessages.length;
-
-    }
-
-
-    profileBio.textContent =
-      bioText +
-      (
-        bioCursorVisible
-          ? '|'
-          : ' '
-      );
+          bioCursorVisible
+            ? '|'
+            : ' '
+        );
 
 
-    if (
-      Math.random() < 0.1
-    ) {
+      if (
+        Math.random() < 0.1
+      ) {
 
-      profileBio.classList.add(
-        'glitch'
-      );
-
-      setTimeout(() => {
-
-        profileBio.classList.remove(
+        profileBio.classList.add(
           'glitch'
         );
 
-      }, 200);
+        setTimeout(
+          () => {
+            profileBio.classList.remove(
+              'glitch'
+            );
+          },
+          200
+        );
+
+      }
+
+
+      setTimeout(
+        type,
+        isBioDeleting
+          ? 75
+          : 150
+      );
 
     }
 
 
-    setTimeout(
-      typeWriterBio,
-      isBioDeleting
-        ? 75
-        : 150
-    );
+    type();
 
   }
 
 
-  setInterval(() => {
+  setInterval(
+    () => {
 
-    bioCursorVisible =
-      !bioCursorVisible;
+      bioCursorVisible =
+        !bioCursorVisible;
 
-    profileBio.textContent =
-      bioText +
-      (
-        bioCursorVisible
-          ? '|'
-          : ' '
-      );
+      profileBio.textContent =
+        bioText +
+        (
+          bioCursorVisible
+            ? '|'
+            : ' '
+        );
 
-  }, 500);
+    },
+    500
+  );
 
 
   /* =========================
@@ -955,17 +1142,11 @@ document.addEventListener('DOMContentLoaded', () => {
       backgroundVideo,
       {
         opacity: 0,
-
         duration: 0.5,
-
         ease: 'power2.in',
 
         onComplete: () => {
 
-          /*
-           * Save the user's current
-           * video audio settings.
-           */
           const wasMuted =
             backgroundVideo.muted;
 
@@ -979,19 +1160,17 @@ document.addEventListener('DOMContentLoaded', () => {
           backgroundVideo.loop =
             true;
 
-
           /*
-           * IMPORTANT:
-           * Do NOT force unmute here.
-           * Theme changes preserve
-           * the user's mute state.
+           * Preserve video audio settings.
            */
+
           backgroundVideo.muted =
             wasMuted;
 
           backgroundVideo.volume =
             currentVolume;
 
+          backgroundVideo.load();
 
           backgroundVideo.play()
             .catch(err => {
@@ -1051,9 +1230,7 @@ document.addEventListener('DOMContentLoaded', () => {
               'hidden'
             );
 
-          }
-
-          else {
+          } else {
 
             resultsButtonContainer.classList.add(
               'hidden'
@@ -1080,12 +1257,14 @@ document.addEventListener('DOMContentLoaded', () => {
             backgroundVideo,
             {
               opacity: 1,
-
               duration: 0.5,
-
               ease: 'power2.out',
 
               onComplete: () => {
+
+                profileContainer.classList.remove(
+                  'fast-orbit'
+                );
 
                 profileContainer.classList.remove(
                   'orbit'
@@ -1206,43 +1385,13 @@ document.addEventListener('DOMContentLoaded', () => {
       rect.height / 2;
 
 
-    let clientX;
-    let clientY;
-
-
-    if (
-      e.type ===
-      'touchmove'
-    ) {
-
-      clientX =
-        e.touches[0].clientX;
-
-      clientY =
-        e.touches[0].clientY;
-
-    }
-
-    else {
-
-      clientX =
-        e.clientX;
-
-      clientY =
-        e.clientY;
-
-    }
-
-
     const mouseX =
-      clientX - centerX;
+      e.clientX - centerX;
 
     const mouseY =
-      clientY - centerY;
-
+      e.clientY - centerY;
 
     const maxTilt = 15;
-
 
     const tiltX =
       (mouseY / rect.height) *
@@ -1258,11 +1407,8 @@ document.addEventListener('DOMContentLoaded', () => {
       {
         rotationX: tiltX,
         rotationY: tiltY,
-
         duration: 0.3,
-
         ease: 'power2.out',
-
         transformPerspective: 1000
       }
     );
@@ -1272,7 +1418,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   profileBlock.addEventListener(
     'mousemove',
-    (e) => {
+    e => {
 
       handleTilt(
         e,
@@ -1292,9 +1438,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
           rotationX: 0,
           rotationY: 0,
-
           duration: 0.5,
-
           ease: 'power2.out'
         }
       );
@@ -1314,12 +1458,15 @@ document.addEventListener('DOMContentLoaded', () => {
       glitchOverlay.style.opacity =
         '1';
 
-      setTimeout(() => {
+      setTimeout(
+        () => {
 
-        glitchOverlay.style.opacity =
-          '0';
+          glitchOverlay.style.opacity =
+            '0';
 
-      }, 500);
+        },
+        500
+      );
 
     }
   );
@@ -1342,19 +1489,22 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
 
-    setTimeout(() => {
+    setTimeout(
+      () => {
 
-      profileContainer.classList.remove(
-        'fast-orbit'
-      );
+        profileContainer.classList.remove(
+          'fast-orbit'
+        );
 
-      void profileContainer.offsetWidth;
+        void profileContainer.offsetWidth;
 
-      profileContainer.classList.add(
-        'orbit'
-      );
+        profileContainer.classList.add(
+          'orbit'
+        );
 
-    }, 500);
+      },
+      500
+    );
 
   }
 
@@ -1367,36 +1517,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   profilePicture.addEventListener(
     'touchstart',
-    (e) => {
+    e => {
 
       e.preventDefault();
 
       profileOrbit();
-
-    }
-  );
-
-
-  /* =========================
-     RESUME
-  ========================= */
-
-  const resumeButton =
-    document.getElementById(
-      'view-resume-btn'
-    );
-
-
-  resumeButton.addEventListener(
-    'click',
-    () => {
-
-      /*
-       * Resume is handled by the
-       * existing inline button,
-       * so no extra functionality
-       * is needed here.
-       */
 
     }
   );
