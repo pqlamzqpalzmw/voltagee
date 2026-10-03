@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Services — Voltage.</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Courier New', monospace;
+}
+
+body {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+  padding: 40px;
+}
+
+.services-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.back-button {
+  display: inline-block;
+
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 10px 16px;
+  border-radius: 8px;
+
+  font-size: 12px;
+  letter-spacing: 1.5px;
+
+  transition: 0.2s;
+}
+
+.back-button:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.08);
+}
+
+h1 {
+  margin-top: 80px;
+  font-size: 48px;
+  letter-spacing: 5px;
+}
+
+.subtitle {
+  margin-top: 10px;
+  color: rgba(255,255,255,0.5);
+}
+
+.services-grid {
+  margin-top: 50px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.service-card {
+  padding: 30px;
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+
+  border-radius: 15px;
+
+  transition: 0.25s;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.08);
+}
+
+.service-card h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.service-card p {
+  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+
+  body {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 34px;
+    margin-top: 50px;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="services-page">
+
+  <a href="index.html" class="back-button">
+    ← BACK
+  </a>
+
+  <h1>SERVICES</h1>
+
+  <p class="subtitle">
+    What I can help with.
+  </p>
+
+  <div class="services-grid">
+
+    <div class="service-card">
+      <h2>Community Management</h2>
+      <p>
+        Discord moderation, community management,
+        member support, and server organization.
+      </p>
+    </div>
+
+    <div class="service-card">
+      <h2>Discord Setup</h2>
+      <p>
+        Server structure, roles, channels,
+        moderation systems, and organization.
+      </p>
+    </div>
+
+    <div class="service-card">
+      <h2>Social Media</h2>
+      <p>
+        Social media management, organization,
+        and community growth support.
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
