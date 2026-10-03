@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,279 +11,133 @@
 
 <style>
 
+/* =========================
+   MINECRAFT FONT
+========================= */
+
+@font-face {
+  font-family: 'Minecraft';
+  src: url('minecraft.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+/* =========================
+   RESET
+========================= */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Courier New', monospace;
 }
 
-html {
-  scroll-behavior: smooth;
+
+/* =========================
+   VARIABLES
+========================= */
+
+:root {
+  --green: #55ff55;
+  --dark-green: #2f8f2f;
+  --light-green: #8cff8c;
+
+  --background: #080808;
+  --panel: #111111;
+  --panel-light: #171717;
+
+  --white: #ffffff;
+  --text: #d8d8d8;
+  --muted: #8c8c8c;
+
+  --border: rgba(85, 255, 85, 0.25);
 }
+
+
+/* =========================
+   BODY
+========================= */
 
 body {
   min-height: 100vh;
-  background: #000;
-  color: #fff;
-  padding: 40px;
+
+  background:
+    radial-gradient(
+      circle at 50% -20%,
+      rgba(85, 255, 85, 0.08),
+      transparent 45%
+    ),
+    #080808;
+
+  color: var(--text);
+
+  font-family: 'Courier New', monospace;
+
   overflow-x: hidden;
 }
 
-/* Background glow */
+
+/* =========================
+   PIXEL GRID
+========================= */
 
 body::before {
   content: "";
+
   position: fixed;
-  width: 700px;
-  height: 700px;
-  top: -300px;
-  left: -300px;
-  background: rgba(59,130,246,0.08);
-  filter: blur(120px);
+
+  inset: 0;
+
   pointer-events: none;
+
+  opacity: 0.035;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,0.5) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,0.5) 1px,
+      transparent 1px
+    );
+
+  background-size: 32px 32px;
+
+  z-index: 0;
 }
 
-body::after {
-  content: "";
-  position: fixed;
-  width: 600px;
-  height: 600px;
-  bottom: -300px;
-  right: -300px;
-  background: rgba(0,150,255,0.06);
-  filter: blur(120px);
-  pointer-events: none;
-}
 
-/* Main */
+/* =========================
+   MAIN PAGE
+========================= */
 
 .services-page {
-  max-width: 1100px;
+
+  width: min(1100px, 92%);
+
   margin: 0 auto;
+
+  padding: 35px 0 80px;
+
   position: relative;
+
   z-index: 2;
 }
 
-/* Back button */
 
-.back-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-
-  color: rgba(255,255,255,0.7);
-  text-decoration: none;
-
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 10px 16px;
-  border-radius: 8px;
-
-  font-size: 12px;
-  letter-spacing: 1.5px;
-
-  transition: 0.2s;
-}
-
-.back-button:hover {
-  color: #fff;
-  border-color: rgba(59,130,246,0.6);
-  background: rgba(59,130,246,0.08);
-  transform: translateX(-2px);
-}
-
-/* Header */
-
-.page-header {
-  margin-top: 75px;
-  margin-bottom: 55px;
-}
-
-.page-label {
-  color: rgba(59,130,246,0.8);
-  font-size: 11px;
-  letter-spacing: 4px;
-  margin-bottom: 14px;
-}
-
-h1 {
-  font-size: clamp(42px, 7vw, 76px);
-  letter-spacing: 6px;
-  line-height: 1;
-}
-
-.subtitle {
-  margin-top: 18px;
-  color: rgba(255,255,255,0.45);
-  font-size: 13px;
-  letter-spacing: 1px;
-}
-
-/* About */
-
-.section {
-  margin-bottom: 55px;
-}
-
-.section-title {
-  font-size: 22px;
-  letter-spacing: 3px;
-  margin-bottom: 18px;
-}
-
-.section-title::before {
-  content: "// ";
-  color: rgba(59,130,246,0.7);
-}
-
-.about-box {
-  padding: 30px;
-
-  background: rgba(255,255,255,0.035);
-  border: 1px solid rgba(255,255,255,0.12);
-
-  border-radius: 16px;
-
-  line-height: 1.8;
-  color: rgba(255,255,255,0.65);
-
-  box-shadow:
-    0 20px 60px rgba(0,0,0,0.35),
-    inset 0 0 30px rgba(255,255,255,0.015);
-}
-
-.about-box p {
-  margin-bottom: 18px;
-}
-
-.about-box p:last-child {
-  margin-bottom: 0;
-}
-
-.highlight {
-  color: #fff;
-}
-
-/* Services grid */
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-}
-
-.service-card {
-  position: relative;
-
-  padding: 28px;
-
-  background: rgba(255,255,255,0.035);
-  border: 1px solid rgba(255,255,255,0.12);
-
-  border-radius: 15px;
-
-  transition:
-    transform 0.25s,
-    border-color 0.25s,
-    background 0.25s;
-
-  overflow: hidden;
-}
-
-.service-card::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-
-  width: 2px;
-  height: 100%;
-
-  background: rgba(59,130,246,0.5);
-
-  opacity: 0;
-  transition: 0.25s;
-}
-
-.service-card:hover {
-  transform: translateY(-5px);
-
-  border-color: rgba(59,130,246,0.35);
-
-  background: rgba(59,130,246,0.045);
-}
-
-.service-card:hover::before {
-  opacity: 1;
-}
-
-.service-number {
-  color: rgba(59,130,246,0.65);
-  font-size: 11px;
-  letter-spacing: 2px;
-  margin-bottom: 12px;
-}
-
-.service-card h2 {
-  font-size: 18px;
-  margin-bottom: 12px;
-  letter-spacing: 1px;
-}
-
-.service-card p {
-  color: rgba(255,255,255,0.5);
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-/* DMCA section */
-
-.dmca-box {
-  padding: 30px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(59,130,246,0.06),
-      rgba(255,255,255,0.025)
-    );
-
-  border: 1px solid rgba(59,130,246,0.2);
-  border-radius: 16px;
-}
-
-.dmca-box h2 {
-  font-size: 19px;
-  margin-bottom: 14px;
-}
-
-.dmca-box p {
-  color: rgba(255,255,255,0.55);
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-/* Footer */
-
-.page-footer {
-  margin-top: 70px;
-  padding-top: 25px;
-
-  border-top: 1px solid rgba(255,255,255,0.1);
-
-  color: rgba(255,255,255,0.3);
-
-  font-size: 11px;
-  letter-spacing: 1px;
-}
-
-/* Top-right watermark */
+/* =========================
+   WATERMARK
+========================= */
 
 .watermark {
-  position: absolute;
 
-  top: 25px;
-  right: 30px;
+  position: fixed;
+
+  top: 22px;
+  right: 28px;
 
   width: 150px;
   height: 150px;
@@ -294,49 +150,538 @@ h1 {
 
   z-index: 100;
 
-  filter: drop-shadow(0 0 12px rgba(0,0,0,0.8));
-
-  transition: opacity 0.2s;
+  filter:
+    drop-shadow(4px 4px 0 rgba(0,0,0,0.8))
+    drop-shadow(0 0 15px rgba(85,255,85,0.15));
 }
 
-.watermark:hover {
-  opacity: 0.7;
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 16px;
+
+  color: var(--white);
+
+  text-decoration: none;
+
+  font-family: 'Minecraft', monospace;
+
+  font-size: 12px;
+
+  letter-spacing: 1px;
+
+  background: #171717;
+
+  border: 2px solid #444;
+
+  box-shadow:
+    3px 3px 0 #000;
+
+  transition: 0.15s ease;
+
 }
 
-/* Mobile */
+
+.back-button:hover {
+
+  background: #222;
+
+  border-color: var(--green);
+
+  color: var(--light-green);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    3px 5px 0 #000;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.page-header {
+
+  margin-top: 75px;
+
+  margin-bottom: 55px;
+
+}
+
+
+.page-label {
+
+  font-family: 'Minecraft', monospace;
+
+  color: var(--green);
+
+  font-size: 13px;
+
+  letter-spacing: 3px;
+
+  margin-bottom: 15px;
+
+  text-shadow:
+    2px 2px 0 #000;
+}
+
+
+h1 {
+
+  font-family: 'Minecraft', monospace;
+
+  font-size: clamp(42px, 7vw, 78px);
+
+  color: var(--white);
+
+  letter-spacing: 3px;
+
+  line-height: 1;
+
+  text-shadow:
+    4px 4px 0 #000,
+    0 0 20px rgba(85,255,85,0.2);
+
+}
+
+
+.subtitle {
+
+  margin-top: 18px;
+
+  color: var(--muted);
+
+  font-size: 13px;
+
+  letter-spacing: 1px;
+
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.section {
+
+  margin-bottom: 55px;
+
+}
+
+
+.section-title {
+
+  font-family: 'Minecraft', monospace;
+
+  color: var(--white);
+
+  font-size: 22px;
+
+  letter-spacing: 2px;
+
+  margin-bottom: 20px;
+
+  text-shadow:
+    2px 2px 0 #000;
+
+}
+
+
+.section-title::before {
+
+  content: "// ";
+
+  color: var(--green);
+
+}
+
+
+/* =========================
+   ABOUT BOX
+========================= */
+
+.about-box {
+
+  padding: 30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,0.035),
+      rgba(0,0,0,0.8)
+    );
+
+  border: 2px solid var(--border);
+
+  box-shadow:
+    4px 4px 0 #000,
+    inset 0 0 0 1px rgba(255,255,255,0.03);
+
+}
+
+
+.about-box p {
+
+  color: var(--text);
+
+  font-size: 13px;
+
+  line-height: 1.9;
+
+  margin-bottom: 18px;
+
+}
+
+
+.about-box p:last-child {
+
+  margin-bottom: 0;
+
+}
+
+
+.highlight {
+
+  color: var(--green);
+
+}
+
+
+/* =========================
+   SERVICES GRID
+========================= */
+
+.services-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+
+}
+
+
+/* =========================
+   SERVICE CARD
+========================= */
+
+.service-card {
+
+  position: relative;
+
+  padding: 28px;
+
+  background: var(--panel);
+
+  border: 2px solid rgba(255,255,255,0.1);
+
+  box-shadow:
+    4px 4px 0 #000;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+
+}
+
+
+.service-card::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+  height: 3px;
+
+  background: var(--green);
+
+  transform: scaleX(0);
+
+  transform-origin: left;
+
+  transition: transform 0.2s ease;
+
+}
+
+
+.service-card:hover {
+
+  transform: translate(-2px, -4px);
+
+  border-color: rgba(85,255,85,0.55);
+
+  background: var(--panel-light);
+
+  box-shadow:
+    6px 6px 0 #000,
+    0 0 20px rgba(85,255,85,0.08);
+
+}
+
+
+.service-card:hover::after {
+
+  transform: scaleX(1);
+
+}
+
+
+/* =========================
+   SERVICE NUMBER
+========================= */
+
+.service-number {
+
+  font-family: 'Minecraft', monospace;
+
+  color: var(--green);
+
+  font-size: 12px;
+
+  margin-bottom: 15px;
+
+}
+
+
+/* =========================
+   SERVICE TITLE
+========================= */
+
+.service-card h2 {
+
+  font-family: 'Minecraft', monospace;
+
+  color: var(--white);
+
+  font-size: 18px;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 14px;
+
+  text-shadow:
+    2px 2px 0 #000;
+
+}
+
+
+/* =========================
+   SERVICE TEXT
+========================= */
+
+.service-card p {
+
+  color: var(--muted);
+
+  font-size: 13px;
+
+  line-height: 1.8;
+
+}
+
+
+/* =========================
+   DMCA SECTION
+========================= */
+
+.dmca-box {
+
+  padding: 30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(85,255,85,0.06),
+      rgba(0,0,0,0.85)
+    );
+
+  border: 2px solid rgba(85,255,85,0.25);
+
+  box-shadow:
+    4px 4px 0 #000;
+
+}
+
+
+.dmca-box h2 {
+
+  font-family: 'Minecraft', monospace;
+
+  color: var(--green);
+
+  font-size: 19px;
+
+  margin-bottom: 16px;
+
+  text-shadow:
+    2px 2px 0 #000;
+
+}
+
+
+.dmca-box p {
+
+  color: var(--text);
+
+  font-size: 13px;
+
+  line-height: 1.9;
+
+  margin-bottom: 15px;
+
+}
+
+
+.dmca-box p:last-child {
+
+  margin-bottom: 0;
+
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.page-footer {
+
+  margin-top: 75px;
+
+  padding-top: 25px;
+
+  border-top: 2px solid rgba(255,255,255,0.08);
+
+  color: #555;
+
+  font-size: 11px;
+
+  letter-spacing: 2px;
+
+  font-family: 'Minecraft', monospace;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 700px) {
 
-  body {
-    padding: 20px;
+  .services-page {
+
+    width: 90%;
+
+    padding-top: 25px;
+
   }
+
 
   .page-header {
+
     margin-top: 55px;
+
     margin-bottom: 40px;
+
   }
+
 
   h1 {
+
     font-size: 42px;
-    letter-spacing: 4px;
+
+    letter-spacing: 2px;
+
   }
 
+
   .services-grid {
+
     grid-template-columns: 1fr;
+
   }
+
 
   .about-box,
   .dmca-box,
   .service-card {
+
     padding: 22px;
+
   }
 
+
+  .about-box p,
+  .service-card p,
+  .dmca-box p {
+
+    font-size: 12px;
+
+  }
+
+
   .watermark {
+
     width: 100px;
     height: 100px;
-    top: 18px;
-    right: 15px;
+
+    top: 15px;
+    right: 12px;
+
+    opacity: 0.4;
+
   }
+
+}
+
+
+/* =========================
+   VERY SMALL SCREENS
+========================= */
+
+@media (max-width: 420px) {
+
+  .watermark {
+
+    width: 75px;
+    height: 75px;
+
+  }
+
+
+  h1 {
+
+    font-size: 34px;
+
+  }
+
+
+  .page-label {
+
+    font-size: 10px;
+
+  }
+
 }
 
 </style>
@@ -345,33 +690,60 @@ h1 {
 
 <body>
 
+<!-- =========================
+     WATERMARK
+========================= -->
+
+<img
+src="yesyes.jpg"
+alt=""
+class="watermark"
+
+>
+
 <div class="services-page">
 
-  <!-- Back -->
+  <!-- =========================
+       BACK
+  ========================= -->
 
-  <a href="index.html" class="back-button">
-    ← BACK
+<a
+href="index.html"
+class="back-button"
+
+>
+
+```
+← BACK
+```
+
   </a>
 
-  <!-- Header -->
+  <!-- =========================
+       HEADER
+  ========================= -->
 
-  <div class="page-header">
+  <header class="page-header">
 
 ```
 <div class="page-label">
   VOLTAGE.
 </div>
 
-<h1>SERVICES</h1>
+<h1>
+  SERVICES
+</h1>
 
 <p class="subtitle">
   Community. Management. Digital work.
 </p>
 ```
 
-  </div>
+  </header>
 
-  <!-- About Me -->
+  <!-- =========================
+       ABOUT ME
+  ========================= -->
 
   <section class="section">
 
@@ -380,14 +752,18 @@ h1 {
   ABOUT ME
 </h2>
 
+
 <div class="about-box">
 
   <p>
     I have been involved with
-    <span class="highlight">Discord for over 6 years</span>
+    <span class="highlight">
+      Discord for over 6 years
+    </span>
     and have gained experience working with different communities,
     servers, creators, and projects.
   </p>
+
 
   <p>
     Over the years, I have become a valuable asset to many people
@@ -395,11 +771,13 @@ h1 {
     and online communities.
   </p>
 
+
   <p>
     I am passionate about what I do and I am always glad to help out
     when I can. I enjoy working with people, solving problems, and
     helping projects become more organized and successful.
   </p>
+
 
   <p>
     I do many different things, including
@@ -415,7 +793,9 @@ h1 {
 
   </section>
 
-  <!-- Services -->
+  <!-- =========================
+       SERVICES
+  ========================= -->
 
   <section class="section">
 
@@ -424,7 +804,9 @@ h1 {
   WHAT I DO
 </h2>
 
+
 <div class="services-grid">
+
 
   <div class="service-card">
 
@@ -537,12 +919,15 @@ h1 {
 
   </div>
 
+
 </div>
 ```
 
   </section>
 
-  <!-- DMCA -->
+  <!-- =========================
+       DMCA
+  ========================= -->
 
   <section class="section">
 
@@ -551,47 +936,49 @@ h1 {
   DMCA & GAME PROTECTION
 </h2>
 
+
 <div class="dmca-box">
 
   <h2>
     Roblox Game Research
   </h2>
 
+
   <p>
     I have also recently started helping with the DMCA process
     for games. I begin by researching games on Roblox and looking
     for games that may have names or branding similar to an existing
-    project. From there, I review the game and look for potential
-    unauthorized use of assets or other material.
+    project.
   </p>
 
-  <p style="margin-top: 15px;">
-    The goal is to identify potential issues and organize the
-    information needed for the appropriate rights holder to review
-    and pursue the proper process.
+
+  <p>
+    From there, I review the game and look for potential unauthorized
+    use of assets or other material. I organize the information I find
+    so that the appropriate rights holder can review the situation
+    and decide what action to take.
   </p>
+
 
 </div>
 ```
 
   </section>
 
-  <!-- Footer -->
+  <!-- =========================
+       FOOTER
+  ========================= -->
 
-  <div class="page-footer">
-    VOLTAGE. — DIGITAL SERVICES
-  </div>
+  <footer class="page-footer">
+
+```
+VOLTAGE. — DIGITAL SERVICES
+```
+
+  </footer>
 
 </div>
 
-<!-- Bottom-right watermark -->
-
-<img
-src="yesyes.jpg"
-alt=""
-class="watermark"
-
->
-
 </body>
+
 </html>
