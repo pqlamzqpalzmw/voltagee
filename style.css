@@ -773,3 +773,42 @@ body.car-theme {
     clip: rect(65px, 9999px, 45px, 0);
   }
 }
+
+/* =========================
+   SERVICES BUTTON
+========================= */
+
+.services-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+
+  z-index: 90;
+
+  padding: 10px 18px;
+
+  color: #fff;
+  background: rgba(0, 0, 0, 0.65);
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+
+  text-decoration: none;
+
+  backdrop-filter: blur(10px);
+
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+
+.services-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.05);
+}
