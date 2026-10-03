@@ -275,16 +275,16 @@ h1 {
   letter-spacing: 1px;
 }
 
-/* Watermark */
+/* Top-right watermark */
 
 .watermark {
-  position: fixed;
+  position: absolute;
 
-  right: 18px;
-  bottom: 15px;
+  top: 25px;
+  right: 30px;
 
-  width: 70px;
-  height: 70px;
+  width: 150px;
+  height: 150px;
 
   object-fit: contain;
 
@@ -294,7 +294,7 @@ h1 {
 
   z-index: 100;
 
-  filter: drop-shadow(0 0 10px rgba(0,0,0,0.8));
+  filter: drop-shadow(0 0 12px rgba(0,0,0,0.8));
 
   transition: opacity 0.2s;
 }
@@ -332,10 +332,10 @@ h1 {
   }
 
   .watermark {
-    width: 55px;
-    height: 55px;
-    right: 12px;
-    bottom: 10px;
+    width: 100px;
+    height: 100px;
+    top: 18px;
+    right: 15px;
   }
 }
 
