@@ -6,7 +6,11 @@
 
     <title>Services | Voltage</title>
 
+    <!-- GSAP - SAME LIBRARY USED BY YOUR MAIN SITE -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
     <style>
+
         @font-face {
             font-family: "Minecraft";
             src: url("minecraft.ttf") format("truetype");
@@ -29,6 +33,7 @@
             overflow-x: hidden;
         }
 
+
         /* =========================
            BACKGROUND VIDEO
         ========================= */
@@ -36,20 +41,29 @@
         #background-video {
             position: fixed;
             inset: 0;
+
             width: 100%;
             height: 100%;
+
             object-fit: cover;
+
             z-index: -3;
+
             pointer-events: none;
         }
+
 
         #video-overlay {
             position: fixed;
             inset: 0;
+
             background: rgba(0, 0, 0, 0.55);
+
             z-index: -2;
+
             pointer-events: none;
         }
+
 
         /* =========================
            PIXEL OVERLAY
@@ -58,7 +72,9 @@
         #pixel-overlay {
             position: fixed;
             inset: 0;
+
             z-index: -1;
+
             pointer-events: none;
 
             background-image:
@@ -75,12 +91,14 @@
             background-size: 8px 8px;
         }
 
+
         /* =========================
            START SCREEN
         ========================= */
 
         #start-screen {
             position: fixed;
+
             inset: 0;
 
             width: 100%;
@@ -89,6 +107,7 @@
             background: #000;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -97,25 +116,24 @@
             cursor: pointer;
 
             opacity: 1;
-            visibility: visible;
-
-            transition:
-                opacity 0.7s ease,
-                visibility 0.7s ease;
         }
+
 
         #start-text {
             color: white;
+
             font-family: "Minecraft", monospace;
+
             font-size: 42px;
+
             user-select: none;
         }
 
+
         #start-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
             pointer-events: none;
         }
+
 
         /* =========================
            WATERMARK
@@ -123,6 +141,7 @@
 
         #watermark {
             position: fixed;
+
             top: 20px;
             right: 20px;
 
@@ -138,25 +157,31 @@
             opacity: 0.9;
         }
 
+
         /* =========================
            NAVIGATION
         ========================= */
 
         nav {
             position: relative;
+
             z-index: 10;
 
             width: 100%;
 
             display: flex;
+
             justify-content: center;
+
             gap: 40px;
 
             padding: 25px 20px;
         }
 
+
         nav a {
             color: white;
+
             text-decoration: none;
 
             font-size: 15px;
@@ -168,10 +193,13 @@
             transition: 0.2s;
         }
 
+
         nav a:hover {
             border-color: #55ff55;
+
             color: #55ff55;
         }
+
 
         /* =========================
            HERO
@@ -181,6 +209,7 @@
             min-height: 65vh;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -189,11 +218,14 @@
             padding: 80px 20px 60px;
 
             position: relative;
+
             z-index: 2;
         }
 
+
         .hero h1 {
             font-size: clamp(45px, 10vw, 110px);
+
             color: #55ff55;
 
             text-shadow:
@@ -203,17 +235,21 @@
             margin-bottom: 20px;
         }
 
+
         .hero p {
             font-size: 16px;
+
             color: #ddd;
         }
 
+
         /* =========================
-           MAIN CONTENT
+           CONTENT
         ========================= */
 
         .container {
             position: relative;
+
             z-index: 2;
 
             width: min(1100px, 90%);
@@ -223,9 +259,11 @@
             padding-bottom: 100px;
         }
 
+
         section {
             margin-bottom: 90px;
         }
+
 
         .section-title {
             color: #55ff55;
@@ -236,6 +274,7 @@
 
             text-shadow: 3px 3px #111;
         }
+
 
         .section-text {
             font-family: Arial, sans-serif;
@@ -249,8 +288,9 @@
             max-width: 900px;
         }
 
+
         /* =========================
-           SERVICES GRID
+           SERVICES
         ========================= */
 
         .services-grid {
@@ -261,6 +301,7 @@
 
             gap: 20px;
         }
+
 
         .service-card {
             background: rgba(0, 0, 0, 0.78);
@@ -277,6 +318,7 @@
                 background 0.2s;
         }
 
+
         .service-card:hover {
             transform: translateY(-5px);
 
@@ -285,6 +327,7 @@
             background: rgba(0, 20, 0, 0.85);
         }
 
+
         .service-card h3 {
             color: #55ff55;
 
@@ -292,6 +335,7 @@
 
             margin-bottom: 15px;
         }
+
 
         .service-card p {
             font-family: Arial, sans-serif;
@@ -303,8 +347,9 @@
             font-size: 15px;
         }
 
+
         /* =========================
-           DMCA SECTION
+           DMCA
         ========================= */
 
         .dmca {
@@ -315,9 +360,11 @@
             padding: 35px;
         }
 
+
         .dmca:hover {
             border-color: #55ff55;
         }
+
 
         /* =========================
            FOOTER
@@ -325,18 +372,22 @@
 
         footer {
             position: relative;
+
             z-index: 2;
 
             text-align: center;
 
             padding: 40px 20px;
 
-            border-top: 2px solid rgba(85, 255, 85, 0.25);
+            border-top:
+                2px solid
+                rgba(85, 255, 85, 0.25);
 
             color: #888;
 
             font-size: 13px;
         }
+
 
         /* =========================
            MEDIA CONTROLS
@@ -351,7 +402,9 @@
             z-index: 1000;
 
             display: flex;
+
             align-items: center;
+
             gap: 10px;
 
             background: rgba(0, 0, 0, 0.85);
@@ -364,6 +417,7 @@
 
             font-size: 12px;
         }
+
 
         .media-button {
             background: transparent;
@@ -379,14 +433,18 @@
             cursor: pointer;
         }
 
+
         .media-button:hover {
             border-color: #55ff55;
+
             color: #55ff55;
         }
+
 
         #music-status {
             color: #55ff55;
         }
+
 
         /* =========================
            MOBILE
@@ -422,23 +480,28 @@
                 left: 10px;
                 bottom: 10px;
             }
+
         }
+
     </style>
 </head>
 
+
 <body>
+
 
     <!-- =========================
          START SCREEN
+         SAME CONCEPT AS INDEX
     ========================= -->
 
     <div id="start-screen">
-        <div id="start-text">...</div>
+        <div id="start-text"></div>
     </div>
 
 
     <!-- =========================
-         BACKGROUND VIDEO
+         VIDEO
     ========================= -->
 
     <video
@@ -449,13 +512,17 @@
         webkit-playsinline
         preload="auto"
     >
+
         <source
             src="assets/background2.mp4"
             type="video/mp4"
         >
+
     </video>
 
+
     <div id="video-overlay"></div>
+
     <div id="pixel-overlay"></div>
 
 
@@ -471,12 +538,19 @@
 
 
     <!-- =========================
-         NAVIGATION
+         NAV
     ========================= -->
 
     <nav>
-        <a href="index.html">HOME</a>
-        <a href="services.html">SERVICES</a>
+
+        <a href="index.html">
+            HOME
+        </a>
+
+        <a href="services.html">
+            SERVICES
+        </a>
+
     </nav>
 
 
@@ -485,13 +559,19 @@
     ========================= -->
 
     <div class="hero">
+
         <div>
-            <h1>SERVICES</h1>
+
+            <h1>
+                SERVICES
+            </h1>
 
             <p>
                 Community management • Discord • Moderation • Digital projects
             </p>
+
         </div>
+
     </div>
 
 
@@ -501,7 +581,6 @@
 
     <main class="container">
 
-        <!-- ABOUT -->
 
         <section>
 
@@ -523,15 +602,15 @@
         </section>
 
 
-        <!-- SERVICES -->
-
         <section>
 
             <h2 class="section-title">
                 WHAT I DO
             </h2>
 
+
             <div class="services-grid">
+
 
                 <div class="service-card">
 
@@ -616,12 +695,11 @@
 
                 </div>
 
+
             </div>
 
         </section>
 
-
-        <!-- GAME PROTECTION -->
 
         <section>
 
@@ -629,9 +707,11 @@
                 GAME PROTECTION / DMCA
             </h2>
 
+
             <div class="dmca">
 
                 <p class="section-text">
+
                     I have also recently started helping with the DMCA process
                     for games. I begin by researching games on Roblox and
                     looking for games that may have names or branding similar
@@ -640,18 +720,16 @@
                     material. I organize the information I find so that the
                     appropriate rights holder can review the situation and
                     decide what action to take.
+
                 </p>
 
             </div>
 
         </section>
 
+
     </main>
 
-
-    <!-- =========================
-         FOOTER
-    ========================= -->
 
     <footer>
         Voltage © 2026
@@ -667,15 +745,17 @@
         preload="auto"
         loop
     >
+
         <source
             src="assets/music/wethands.mp3"
             type="audio/mpeg"
         >
+
     </audio>
 
 
     <!-- =========================
-         MEDIA CONTROLS
+         CONTROLS
     ========================= -->
 
     <div id="media-controls">
@@ -704,201 +784,353 @@
 
 
     <!-- =========================
-         JAVASCRIPT
+         STARTUP SCRIPT
+         BASED ON INDEX SYSTEM
     ========================= -->
 
     <script>
 
-        const startScreen =
-            document.getElementById("start-screen");
-
-        const video =
-            document.getElementById("background-video");
-
-        const music =
-            document.getElementById("background-music");
-
-        const musicButton =
-            document.getElementById("music-button");
-
-        const musicStatus =
-            document.getElementById("music-status");
-
-        const videoButton =
-            document.getElementById("video-button");
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
 
 
-        let started = false;
+                const startScreen =
+                    document.getElementById(
+                        "start-screen"
+                    );
 
 
-        /*
-         * START EVERYTHING
-         */
-
-        async function enterSite() {
-
-            if (started) {
-                return;
-            }
-
-            started = true;
+                const startText =
+                    document.getElementById(
+                        "start-text"
+                    );
 
 
-            /*
-             * VIDEO
-             */
-
-            video.muted = true;
-            video.volume = 0;
-
-            try {
-
-                await video.play();
-
-            } catch (error) {
-
-                console.log(
-                    "Video could not start:",
-                    error
-                );
-
-            }
+                const backgroundVideo =
+                    document.getElementById(
+                        "background-video"
+                    );
 
 
-            /*
-             * MUSIC
-             */
-
-            music.volume = 0.25;
-
-            try {
-
-                await music.play();
-
-                musicStatus.textContent = "ON";
-
-            } catch (error) {
-
-                console.log(
-                    "Music could not start:",
-                    error
-                );
-
-                musicStatus.textContent = "OFF";
-
-            }
+                const musicPlayer =
+                    document.getElementById(
+                        "background-music"
+                    );
 
 
-            /*
-             * REMOVE START SCREEN
-             */
-
-            startScreen.classList.add("hidden");
-
-
-            /*
-             * Remove it completely after fade
-             */
-
-            setTimeout(function () {
-
-                startScreen.style.display = "none";
-
-            }, 700);
-
-        }
+                const musicButton =
+                    document.getElementById(
+                        "music-button"
+                    );
 
 
-        /*
-         * CLICK THE ... SCREEN
-         */
-
-        startScreen.addEventListener(
-            "click",
-            enterSite
-        );
+                const musicStatus =
+                    document.getElementById(
+                        "music-status"
+                    );
 
 
-        /*
-         * MUSIC BUTTON
-         */
+                const videoButton =
+                    document.getElementById(
+                        "video-button"
+                    );
 
-        musicButton.addEventListener(
-            "click",
-            async function () {
 
-                if (music.paused) {
+                /* =========================
+                   START SCREEN TEXT
+                ========================= */
 
-                    try {
+                const startMessage =
+                    "click to enter...";
 
-                        await music.play();
 
-                        musicStatus.textContent = "ON";
+                let startTextContent = "";
 
-                    } catch (error) {
+                let startIndex = 0;
 
-                        console.log(error);
+                let startCursorVisible = true;
+
+
+                function typeWriterStart() {
+
+                    if (
+                        startIndex <
+                        startMessage.length
+                    ) {
+
+                        startTextContent =
+                            startMessage.slice(
+                                0,
+                                startIndex + 1
+                            );
+
+                        startIndex++;
 
                     }
 
-                } else {
 
-                    music.pause();
-
-                    musicStatus.textContent = "OFF";
-
-                }
-
-            }
-        );
+                    startText.textContent =
+                        startTextContent +
+                        (
+                            startCursorVisible
+                                ? "|"
+                                : " "
+                        );
 
 
-        /*
-         * VIDEO MUST ALWAYS STAY MUTED
-         */
-
-        video.muted = true;
-        video.volume = 0;
-
-
-        /*
-         * VIDEO BUTTON
-         */
-
-        videoButton.addEventListener(
-            "click",
-            function () {
-
-                video.muted = true;
-                video.volume = 0;
-
-                videoButton.textContent =
-                    "VIDEO MUTED";
-
-            }
-        );
-
-
-        /*
-         * IF VIDEO PAUSES, START IT AGAIN
-         */
-
-        video.addEventListener(
-            "pause",
-            function () {
-
-                if (started) {
-
-                    video.play().catch(
-                        function () {}
+                    setTimeout(
+                        typeWriterStart,
+                        100
                     );
 
                 }
 
+
+                setInterval(
+                    function() {
+
+                        startCursorVisible =
+                            !startCursorVisible;
+
+
+                        startText.textContent =
+                            startTextContent +
+                            (
+                                startCursorVisible
+                                    ? "|"
+                                    : " "
+                            );
+
+                    },
+                    500
+                );
+
+
+                typeWriterStart();
+
+
+                /* =========================
+                   INITIAL MEDIA
+                ========================= */
+
+                backgroundVideo.muted = true;
+
+                backgroundVideo.volume = 0;
+
+
+                backgroundVideo.play()
+                    .catch(
+                        function(error) {
+
+                            console.log(
+                                "Video waiting for interaction:",
+                                error
+                            );
+
+                        }
+                    );
+
+
+                musicPlayer.volume = 0.25;
+
+                musicPlayer.pause();
+
+
+                /* =========================
+                   ENTER SITE
+                ========================= */
+
+                let siteEntered = false;
+
+
+                function enterSite() {
+
+                    if (siteEntered) {
+                        return;
+                    }
+
+
+                    siteEntered = true;
+
+
+                    /* =========================
+                       MUSIC
+                    ========================= */
+
+                    musicPlayer.volume = 0.25;
+
+
+                    musicPlayer.play()
+                        .then(
+                            function() {
+
+                                musicStatus.textContent =
+                                    "ON";
+
+                            }
+                        )
+                        .catch(
+                            function(error) {
+
+                                console.error(
+                                    "Failed to start music:",
+                                    error
+                                );
+
+                                musicStatus.textContent =
+                                    "OFF";
+
+                            }
+                        );
+
+
+                    /* =========================
+                       VIDEO
+                       ALWAYS MUTED
+                    ========================= */
+
+                    backgroundVideo.muted = true;
+
+                    backgroundVideo.volume = 0;
+
+
+                    backgroundVideo.play()
+                        .catch(
+                            function(error) {
+
+                                console.error(
+                                    "Failed to start video:",
+                                    error
+                                );
+
+                            }
+                        );
+
+
+                    /* =========================
+                       HIDE START SCREEN
+                       SAME GSAP STYLE AS INDEX
+                    ========================= */
+
+                    gsap.to(
+                        startScreen,
+                        {
+                            opacity: 0,
+
+                            duration: 0.5,
+
+                            onComplete: function() {
+
+                                startScreen.classList.add(
+                                    "hidden"
+                                );
+
+                                startScreen.style.display =
+                                    "none";
+
+                            }
+                        }
+                    );
+
+                }
+
+
+                /* =========================
+                   CLICK
+                ========================= */
+
+                startScreen.addEventListener(
+                    "click",
+                    enterSite
+                );
+
+
+                /* =========================
+                   TOUCH
+                ========================= */
+
+                startScreen.addEventListener(
+                    "touchstart",
+                    function(event) {
+
+                        event.preventDefault();
+
+                        enterSite();
+
+                    }
+                );
+
+
+                /* =========================
+                   MUSIC BUTTON
+                ========================= */
+
+                musicButton.addEventListener(
+                    "click",
+                    function(event) {
+
+                        event.stopPropagation();
+
+
+                        if (
+                            musicPlayer.paused
+                        ) {
+
+                            musicPlayer.play()
+                                .then(
+                                    function() {
+
+                                        musicStatus.textContent =
+                                            "ON";
+
+                                    }
+                                );
+
+                        } else {
+
+                            musicPlayer.pause();
+
+                            musicStatus.textContent =
+                                "OFF";
+
+                        }
+
+                    }
+                );
+
+
+                /* =========================
+                   VIDEO BUTTON
+                ========================= */
+
+                videoButton.addEventListener(
+                    "click",
+                    function(event) {
+
+                        event.stopPropagation();
+
+
+                        backgroundVideo.muted =
+                            true;
+
+                        backgroundVideo.volume =
+                            0;
+
+
+                        videoButton.textContent =
+                            "VIDEO MUTED";
+
+                    }
+                );
+
+
             }
+
         );
 
     </script>
+
 
 </body>
 </html>
