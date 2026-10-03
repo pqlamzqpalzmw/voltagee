@@ -1,993 +1,1056 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Services — Voltage.</title>
-
-<style>
-
-@font-face {
-  font-family: 'Minecraft';
-  src: url('minecraft.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-:root {
-  --green: #55ff55;
-  --dark-green: #2f8f2f;
-  --light-green: #8cff8c;
-
-  --background: #080808;
-  --panel: rgba(10, 10, 10, 0.88);
-  --panel-light: rgba(20, 20, 20, 0.92);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Services | Voltage</title>
+
+  <style>
+    @font-face {
+      font-family: "Minecraft";
+      src: url("minecraft.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    :root {
+      --green: #55ff55;
+      --dark-green: #2f8f2f;
+      --light-green: #8cff8c;
+      --black: #050505;
+      --panel: rgba(10, 10, 10, 0.88);
+      --panel-light: rgba(20, 20, 20, 0.94);
+      --text: #d8d8d8;
+      --muted: #8c8c8c;
+      --border: rgba(85, 255, 85, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--black);
+      color: var(--text);
+      font-family: "Minecraft", monospace;
+      overflow-x: hidden;
+    }
+
+    /* =========================
+       BACKGROUND VIDEO
+    ========================= */
+
+    #background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+      z-index: -3;
+      pointer-events: none;
+    }
+
+    #video-overlay {
+      position: fixed;
+      inset: 0;
+
+      background:
+        linear-gradient(
+          rgba(0, 0, 0, 0.58),
+          rgba(0, 0, 0, 0.82)
+        );
+
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    /* Minecraft-ish pixel overlay */
+
+    #pixel-overlay {
+      position: fixed;
+      inset: 0;
+
+      background-image:
+        linear-gradient(
+          rgba(85, 255, 85, 0.025) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(85, 255, 85, 0.025) 1px,
+          transparent 1px
+        );
+
+      background-size: 32px 32px;
 
-  --white: #ffffff;
-  --text: #d8d8d8;
-  --muted: #8c8c8c;
+      z-index: -1;
+      pointer-events: none;
+    }
 
-  --border: rgba(85, 255, 85, 0.25);
-}
+    /* =========================
+       START SCREEN
+    ========================= */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+    #start-screen {
+      position: fixed;
+      inset: 0;
 
-html {
-  scroll-behavior: smooth;
-}
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-body {
-  min-height: 100vh;
-  background: var(--background);
-  color: var(--white);
-  overflow-x: hidden;
-  font-family: 'Courier New', monospace;
-}
+      background: #000;
 
-/* =========================
-   BACKGROUND VIDEO
-========================= */
+      z-index: 9999;
 
-#background-video {
-  position: fixed;
-  inset: 0;
+      cursor: pointer;
 
-  width: 100%;
-  height: 100%;
+      transition:
+        opacity 0.6s ease,
+        visibility 0.6s ease;
+    }
 
-  object-fit: cover;
+    #start-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
 
-  z-index: -5;
-  pointer-events: none;
-}
+    .start-box {
+      text-align: center;
+      padding: 35px 45px;
 
-#video-overlay {
-  position: fixed;
-  inset: 0;
+      border: 2px solid var(--green);
 
-  background:
-    linear-gradient(
-      rgba(0, 0, 0, 0.68),
-      rgba(0, 0, 0, 0.88)
-    );
+      background: rgba(0, 0, 0, 0.9);
 
-  z-index: -4;
-  pointer-events: none;
-}
+      box-shadow:
+        0 0 25px rgba(85, 255, 85, 0.2),
+        inset 0 0 25px rgba(85, 255, 85, 0.05);
+    }
 
-/* Minecraft-style pixel grid */
+    .start-title {
+      color: var(--green);
+      font-size: 32px;
+      margin-bottom: 15px;
+      text-shadow: 0 0 12px rgba(85, 255, 85, 0.5);
+    }
 
-body::before {
-  content: '';
+    .start-subtitle {
+      color: #aaa;
+      font-size: 13px;
+    }
 
-  position: fixed;
-  inset: 0;
+    /* =========================
+       WATERMARK
+    ========================= */
 
-  background-image:
-    linear-gradient(
-      rgba(85, 255, 85, 0.025) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(85, 255, 85, 0.025) 1px,
-      transparent 1px
-    );
+    #watermark {
+      position: fixed;
 
-  background-size: 32px 32px;
+      top: 18px;
+      right: 18px;
 
-  pointer-events: none;
-  z-index: -3;
-}
+      width: 55px;
+      height: 55px;
 
-/* =========================
-   WATERMARK
-========================= */
+      object-fit: cover;
 
-.watermark {
-  position: fixed;
+      border: 2px solid rgba(85, 255, 85, 0.5);
 
-  top: 22px;
-  right: 28px;
+      image-rendering: pixelated;
 
-  width: 150px;
-  height: 150px;
+      z-index: 100;
 
-  object-fit: contain;
+      opacity: 0.85;
+    }
 
-  opacity: 0.45;
+    /* =========================
+       NAVIGATION
+    ========================= */
 
-  pointer-events: none;
+    nav {
+      position: sticky;
+      top: 0;
 
-  z-index: 100;
+      width: 100%;
 
-  filter:
-    drop-shadow(4px 4px 0 rgba(0,0,0,0.8))
-    drop-shadow(
-      0 0 15px rgba(85,255,85,0.15)
-    );
-}
+      padding: 16px 25px;
 
-/* =========================
-   MUSIC BUTTON
-========================= */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
-#music-button {
-  position: fixed;
+      background: rgba(0, 0, 0, 0.82);
 
-  bottom: 22px;
-  right: 22px;
+      border-bottom: 1px solid var(--border);
 
-  z-index: 200;
+      backdrop-filter: blur(8px);
 
-  padding: 11px 16px;
+      z-index: 50;
+    }
 
-  background: rgba(0, 0, 0, 0.82);
+    .nav-logo {
+      color: var(--green);
+      font-size: 22px;
 
-  color: var(--green);
+      text-decoration: none;
 
-  border: 2px solid var(--green);
+      text-shadow:
+        2px 2px #111,
+        0 0 8px rgba(85, 255, 85, 0.3);
+    }
 
-  font-family: 'Minecraft', monospace;
+    .nav-links {
+      display: flex;
+      gap: 10px;
+    }
 
-  font-size: 10px;
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
 
-  cursor: pointer;
+      padding: 9px 13px;
 
-  box-shadow:
-    4px 4px 0 rgba(0,0,0,0.8),
-    0 0 15px rgba(85,255,85,0.15);
+      border: 1px solid transparent;
 
-  transition: 0.2s;
-}
+      transition: 0.2s ease;
+    }
 
-#music-button:hover {
-  background: rgba(85,255,85,0.12);
+    .nav-links a:hover {
+      color: var(--green);
 
-  transform: translateY(-2px);
+      border-color: var(--border);
 
-  box-shadow:
-    4px 4px 0 rgba(0,0,0,0.8),
-    0 0 25px rgba(85,255,85,0.3);
-}
+      background: rgba(85, 255, 85, 0.05);
+    }
 
-/* =========================
-   MAIN PAGE
-========================= */
+    /* =========================
+       MAIN
+    ========================= */
 
-.services-page {
-  position: relative;
+    main {
+      width: min(1100px, calc(100% - 30px));
 
-  width: 100%;
-  max-width: 1150px;
+      margin: 0 auto;
 
-  margin: 0 auto;
+      padding: 80px 0 100px;
+    }
 
-  padding: 35px 25px 100px;
-}
+    .hero {
+      min-height: 55vh;
 
-/* =========================
-   BACK BUTTON
-========================= */
+      display: flex;
+      flex-direction: column;
 
-.back-button {
-  display: inline-flex;
+      align-items: center;
+      justify-content: center;
 
-  align-items: center;
-  justify-content: center;
+      text-align: center;
+    }
 
-  color: var(--green);
+    .hero h1 {
+      margin: 0;
 
-  text-decoration: none;
+      color: var(--green);
 
-  border: 2px solid var(--border);
+      font-size: clamp(42px, 8vw, 86px);
 
-  background: rgba(0,0,0,0.72);
+      text-shadow:
+        4px 4px #111,
+        0 0 20px rgba(85, 255, 85, 0.35);
+    }
 
-  padding: 10px 17px;
+    .hero p {
+      max-width: 700px;
 
-  font-family: 'Minecraft', monospace;
+      margin-top: 25px;
 
-  font-size: 11px;
+      color: #bbb;
 
-  box-shadow:
-    4px 4px 0 rgba(0,0,0,0.75);
+      line-height: 1.8;
 
-  transition: 0.2s;
-}
+      font-size: 15px;
+    }
 
-.back-button:hover {
-  color: #fff;
+    .minecraft-line {
+      width: 100%;
+      height: 4px;
 
-  border-color: var(--green);
+      margin: 40px 0;
 
-  background: rgba(85,255,85,0.1);
+      background:
+        repeating-linear-gradient(
+          90deg,
+          var(--green) 0,
+          var(--green) 18px,
+          transparent 18px,
+          transparent 24px
+        );
 
-  transform: translate(-2px,-2px);
+      opacity: 0.55;
+    }
 
-  box-shadow:
-    6px 6px 0 rgba(0,0,0,0.75);
-}
+    /* =========================
+       SECTIONS
+    ========================= */
 
-/* =========================
-   HEADER
-========================= */
+    section {
+      margin-bottom: 80px;
+    }
 
-.page-label {
-  margin-top: 65px;
+    .section-title {
+      color: var(--green);
 
-  color: var(--green);
+      font-size: 28px;
 
-  font-family: 'Minecraft', monospace;
+      margin-bottom: 25px;
 
-  font-size: 13px;
+      text-shadow:
+        2px 2px #111,
+        0 0 10px rgba(85, 255, 85, 0.25);
+    }
 
-  letter-spacing: 2px;
+    .section-title::before {
+      content: "> ";
 
-  text-shadow:
-    2px 2px 0 #000;
-}
+      color: var(--dark-green);
+    }
 
-h1 {
-  margin-top: 12px;
+    .panel {
+      background: var(--panel);
 
-  font-family: 'Minecraft', monospace;
+      border: 1px solid var(--border);
 
-  font-size: clamp(38px, 7vw, 76px);
+      padding: 30px;
 
-  line-height: 1.1;
+      box-shadow:
+        0 10px 35px rgba(0, 0, 0, 0.4),
+        inset 0 0 25px rgba(85, 255, 85, 0.02);
+    }
 
-  color: #fff;
+    .panel p {
+      margin: 0;
 
-  text-shadow:
-    4px 4px 0 #000,
-    0 0 25px rgba(85,255,85,0.15);
+      line-height: 1.9;
 
-  letter-spacing: 2px;
-}
+      color: #cfcfcf;
 
-.subtitle {
-  margin-top: 18px;
+      font-size: 14px;
+    }
 
-  max-width: 700px;
+    /* =========================
+       SERVICES
+    ========================= */
 
-  color: var(--muted);
+    .services-grid {
+      display: grid;
 
-  font-size: 14px;
+      grid-template-columns:
+        repeat(3, minmax(0, 1fr));
 
-  line-height: 1.8;
-}
+      gap: 18px;
+    }
 
-/* =========================
-   SECTION
-========================= */
+    .service-card {
+      position: relative;
 
-.section {
-  margin-top: 70px;
-}
+      background: var(--panel-light);
 
-.section-title {
-  display: flex;
+      border: 1px solid var(--border);
 
-  align-items: center;
+      padding: 25px;
 
-  gap: 15px;
+      min-height: 190px;
 
-  margin-bottom: 25px;
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
 
-  font-family: 'Minecraft', monospace;
+    .service-card::before {
+      content: "";
 
-  font-size: 21px;
+      position: absolute;
 
-  color: var(--green);
+      top: 0;
+      left: 0;
 
-  text-shadow:
-    3px 3px 0 #000;
-}
+      width: 100%;
+      height: 3px;
 
-.section-title::after {
-  content: '';
+      background: var(--green);
 
-  height: 2px;
+      opacity: 0.5;
+    }
 
-  flex: 1;
+    .service-card:hover {
+      transform: translateY(-5px);
 
-  background:
-    linear-gradient(
-      to right,
-      var(--green),
-      transparent
-    );
+      border-color: rgba(85, 255, 85, 0.7);
 
-  opacity: 0.4;
-}
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.45),
+        0 0 20px rgba(85, 255, 85, 0.08);
+    }
 
-/* =========================
-   ABOUT ME
-========================= */
+    .service-number {
+      color: var(--dark-green);
 
-.about-box {
-  padding: 30px;
+      font-size: 13px;
 
-  background: var(--panel);
+      margin-bottom: 15px;
+    }
 
-  border: 2px solid var(--border);
+    .service-card h3 {
+      margin: 0 0 14px;
 
-  box-shadow:
-    6px 6px 0 rgba(0,0,0,0.8),
-    0 0 25px rgba(85,255,85,0.04);
-}
+      color: var(--green);
 
-.about-box p {
-  color: var(--text);
+      font-size: 19px;
+    }
 
-  font-size: 14px;
+    .service-card p {
+      margin: 0;
 
-  line-height: 1.9;
+      color: #aaa;
 
-  margin-bottom: 15px;
-}
+      font-size: 13px;
 
-.about-box p:last-child {
-  margin-bottom: 0;
-}
+      line-height: 1.7;
+    }
 
-.highlight {
-  color: var(--green);
+    /* =========================
+       DMCA
+    ========================= */
 
-  font-weight: bold;
-}
+    .dmca-box {
+      border: 1px solid rgba(85, 255, 85, 0.35);
 
-/* =========================
-   SERVICES GRID
-========================= */
+      background:
+        linear-gradient(
+          135deg,
+          rgba(85, 255, 85, 0.07),
+          rgba(0, 0, 0, 0.85)
+        );
 
-.services-grid {
-  display: grid;
+      padding: 30px;
+    }
 
-  grid-template-columns:
-    repeat(3, 1fr);
+    .dmca-label {
+      display: inline-block;
 
-  gap: 18px;
-}
+      color: #000;
 
-.service-card {
-  position: relative;
+      background: var(--green);
 
-  min-height: 190px;
+      padding: 6px 10px;
 
-  padding: 25px;
+      margin-bottom: 20px;
 
-  background: var(--panel);
+      font-size: 12px;
+    }
 
-  border: 2px solid var(--border);
+    .dmca-box p {
+      margin: 0;
 
-  box-shadow:
-    5px 5px 0 rgba(0,0,0,0.8);
+      color: #cfcfcf;
 
-  transition:
-    transform 0.2s,
-    border-color 0.2s,
-    background 0.2s;
-}
+      line-height: 1.9;
 
-.service-card::before {
-  content: '';
+      font-size: 14px;
+    }
 
-  position: absolute;
+    /* =========================
+       MEDIA CONTROLS
+    ========================= */
 
-  top: 0;
-  left: 0;
+    .media-controls {
+      position: fixed;
 
-  width: 7px;
-  height: 7px;
+      bottom: 20px;
+      left: 50%;
 
-  background: var(--green);
+      transform: translateX(-50%);
 
-  box-shadow:
-    calc(100% + 7px) 0 var(--green);
-}
+      z-index: 200;
 
-.service-card:hover {
-  transform:
-    translate(-3px,-5px);
+      display: flex;
 
-  border-color:
-    rgba(85,255,85,0.7);
+      align-items: center;
 
-  background:
-    rgba(15,25,15,0.94);
+      gap: 8px;
 
-  box-shadow:
-    8px 8px 0 rgba(0,0,0,0.8),
-    0 0 25px rgba(85,255,85,0.08);
-}
+      padding: 8px 12px;
 
-.service-card h2 {
-  font-family: 'Minecraft', monospace;
+      background: rgba(0, 0, 0, 0.82);
 
-  color: #fff;
+      border: 1px solid rgba(85, 255, 85, 0.3);
 
-  font-size: 16px;
+      backdrop-filter: blur(10px);
 
-  line-height: 1.5;
+      box-shadow:
+        0 5px 25px rgba(0, 0, 0, 0.5);
+    }
 
-  margin-bottom: 15px;
+    .media-button {
+      font-family: "Minecraft", monospace;
 
-  text-shadow:
-    2px 2px 0 #000;
-}
+      color: var(--green);
 
-.service-card p {
-  color: var(--muted);
+      background: transparent;
 
-  font-size: 13px;
+      border: 1px solid transparent;
 
-  line-height: 1.75;
-}
+      padding: 8px 12px;
 
-/* =========================
-   DMCA SECTION
-========================= */
+      cursor: pointer;
 
-.dmca-box {
-  position: relative;
+      transition: 0.2s ease;
+    }
 
-  padding: 32px;
+    .media-button:hover {
+      border-color: var(--border);
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(20,20,20,0.94),
-      rgba(10,10,10,0.92)
-    );
+      background: rgba(85, 255, 85, 0.08);
+    }
 
-  border: 2px solid
-    rgba(85,255,85,0.35);
+    #music-status {
+      color: #888;
 
-  box-shadow:
-    7px 7px 0 rgba(0,0,0,0.85);
-}
+      font-size: 11px;
 
-.dmca-box::after {
-  content: 'ROBLOX';
+      padding: 0 8px;
+    }
 
-  position: absolute;
+    /* =========================
+       FOOTER
+    ========================= */
 
-  top: 18px;
-  right: 22px;
+    footer {
+      text-align: center;
 
-  color:
-    rgba(85,255,85,0.12);
+      padding: 45px 20px 90px;
 
-  font-family: 'Minecraft', monospace;
+      color: #666;
 
-  font-size: 12px;
+      font-size: 12px;
 
-  letter-spacing: 2px;
-}
+      border-top: 1px solid rgba(85, 255, 85, 0.12);
+    }
 
-.dmca-box h2 {
-  color: var(--green);
+    footer span {
+      color: var(--green);
+    }
 
-  font-family: 'Minecraft', monospace;
+    /* =========================
+       MOBILE
+    ========================= */
 
-  font-size: 20px;
+    @media (max-width: 800px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
 
-  margin-bottom: 20px;
+      nav {
+        padding: 13px 15px;
+      }
 
-  text-shadow:
-    3px 3px 0 #000;
-}
+      .nav-logo {
+        font-size: 17px;
+      }
 
-.dmca-box p {
-  color: var(--text);
+      .nav-links a {
+        padding: 7px 8px;
+        font-size: 11px;
+      }
 
-  font-size: 14px;
+      main {
+        width: min(100% - 20px, 700px);
 
-  line-height: 1.9;
+        padding-top: 45px;
+      }
 
-  margin-bottom: 15px;
-}
+      .panel,
+      .dmca-box {
+        padding: 22px;
+      }
 
-.dmca-box p:last-child {
-  margin-bottom: 0;
-}
+      .media-controls {
+        width: calc(100% - 20px);
 
-/* =========================
-   FOOTER
-========================= */
+        justify-content: center;
+      }
 
-footer {
-  margin-top: 80px;
-
-  padding-top: 25px;
-
-  border-top:
-    1px solid rgba(85,255,85,0.18);
-
-  text-align: center;
-
-  color: rgba(255,255,255,0.3);
-
-  font-size: 11px;
-
-  letter-spacing: 1px;
-}
-
-footer span {
-  color: var(--green);
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 800px) {
-
-  .services-page {
-    padding:
-      25px 18px 90px;
-  }
-
-  .watermark {
-    width: 100px;
-    height: 100px;
-
-    top: 15px;
-    right: 15px;
-
-    opacity: 0.35;
-  }
-
-  .page-label {
-    margin-top: 55px;
-  }
-
-  h1 {
-    font-size: 42px;
-  }
-
-  .subtitle {
-    font-size: 13px;
-  }
-
-  .services-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .section {
-    margin-top: 55px;
-  }
-
-  .about-box,
-  .dmca-box {
-    padding: 22px;
-  }
-
-  .section-title {
-    font-size: 17px;
-  }
-
-  #music-button {
-    bottom: 15px;
-    right: 15px;
-
-    padding: 9px 12px;
-
-    font-size: 9px;
-  }
-}
-
-@media (max-width: 450px) {
-
-  .watermark {
-    width: 75px;
-    height: 75px;
-  }
-
-  h1 {
-    font-size: 34px;
-  }
-
-  .about-box p,
-  .dmca-box p {
-    font-size: 12px;
-  }
-
-  .service-card {
-    min-height: auto;
-    padding: 22px;
-  }
-}
-
-</style>
+      #watermark {
+        width: 45px;
+        height: 45px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- =========================
-     BACKGROUND VIDEO
-========================= -->
-
-<video
-  id="background-video"
-  autoplay
-  muted
-  loop
-  playsinline
->
-  <source src="background.mp4" type="video/mp4">
-</video>
-
-<div id="video-overlay"></div>
-
-
-<!-- =========================
-     BACKGROUND MUSIC
-========================= -->
-
-<audio id="background-music" loop>
-  <source src="wet-hands.mp3" type="audio/mpeg">
-</audio>
-
-
-<!-- =========================
-     WATERMARK
-========================= -->
-
-<img
-  src="yesyes.jpg"
-  class="watermark"
-  alt=""
->
-
-
-<!-- =========================
-     MUSIC BUTTON
-========================= -->
-
-<button
-  id="music-button"
-  onclick="toggleMusic()"
->
-  ♫ MUSIC
-</button>
-
-
-<!-- =========================
-     PAGE
-========================= -->
-
-<div class="services-page">
-
-  <a
-    href="index.html"
-    class="back-button"
+  <!-- BACKGROUND VIDEO -->
+  <video
+    id="background-video"
+    autoplay
+    loop
+    muted
+    playsinline
+    webkit-playsinline
   >
-    ← BACK
-  </a>
+    <source
+      src="assets/background2.mp4"
+      type="video/mp4"
+    >
+  </video>
 
+  <div id="video-overlay"></div>
+  <div id="pixel-overlay"></div>
 
-  <!-- HEADER -->
+  <!-- WATERMARK -->
+  <img
+    id="watermark"
+    src="yesyes.jpg"
+    alt="Voltage"
+  >
 
-  <div class="page-label">
-    VOLTAGE.GEEKIN // SERVICES
+  <!-- START SCREEN -->
+  <div id="start-screen">
+
+    <div class="start-box">
+
+      <div class="start-title">
+        VOLTAGE
+      </div>
+
+      <div class="start-subtitle">
+        CLICK TO ENTER
+      </div>
+
+    </div>
+
   </div>
 
-  <h1>
-    ABOUT ME.
-  </h1>
+  <!-- MUSIC -->
+  <audio
+    id="background-music"
+    preload="auto"
+    loop
+  >
+    <source
+      src="assets/music/wethands.mp3"
+      type="audio/mpeg"
+    >
+  </audio>
 
-  <p class="subtitle">
-    Community management, Discord management,
-    social media, moderation, and digital projects.
-  </p>
+  <!-- NAV -->
+  <nav>
 
+    <a
+      href="index.html"
+      class="nav-logo"
+    >
+      VOLTAGE
+    </a>
 
-  <!-- =========================
-       ABOUT
-  ========================= -->
+    <div class="nav-links">
 
-  <section class="section">
+      <a href="index.html">
+        HOME
+      </a>
 
-    <h2 class="section-title">
-      ABOUT ME
-    </h2>
+      <a href="#services">
+        SERVICES
+      </a>
 
-    <div class="about-box">
+    </div>
+
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- HERO -->
+    <div class="hero">
+
+      <h1>
+        SERVICES
+      </h1>
 
       <p>
-        I have been involved on
-        <span class="highlight">Discord</span>
-        for 6 years and have become a
-        valuable asset to many people.
-        I am passionate about what I do
-        and I am always glad to help out
-        when I can.
-      </p>
-
-      <p>
-        I do many different things including
-        social media management, community
-        management, Discord management,
-        moderation, server organization,
-        and other digital projects.
-      </p>
-
-      <p>
-        I enjoy working with communities,
-        helping people solve problems,
-        and keeping projects organized
-        and running smoothly.
+        Digital services, community management,
+        Discord management, moderation, social media,
+        server organization, and other projects.
       </p>
 
     </div>
 
-  </section>
+    <div class="minecraft-line"></div>
 
+    <!-- ABOUT -->
+    <section>
 
-  <!-- =========================
-       SERVICES
-  ========================= -->
+      <div class="section-title">
+        ABOUT ME
+      </div>
 
-  <section class="section">
-
-    <h2 class="section-title">
-      WHAT I DO
-    </h2>
-
-    <div class="services-grid">
-
-      <div class="service-card">
-
-        <h2>
-          Community Management
-        </h2>
+      <div class="panel">
 
         <p>
-          Managing online communities,
-          helping members, handling issues,
-          and keeping communities active,
-          organized, and welcoming.
+          I have been involved on Discord for 6 years and have
+          become a valuable asset to many people. I am passionate
+          about what I do and I am always glad to help out when I
+          can. I do many different things including social media
+          management, community management, Discord management,
+          moderation, server organization, and other digital
+          projects. I enjoy working with communities, helping
+          people solve problems, and keeping projects organized
+          and running smoothly.
         </p>
 
       </div>
 
+    </section>
 
-      <div class="service-card">
+    <!-- SERVICES -->
+    <section id="services">
 
-        <h2>
-          Discord Management
-        </h2>
+      <div class="section-title">
+        WHAT I DO
+      </div>
+
+      <div class="services-grid">
+
+        <div class="service-card">
+
+          <div class="service-number">
+            SERVICE_01
+          </div>
+
+          <h3>
+            Community Management
+          </h3>
+
+          <p>
+            Helping manage online communities, keeping things
+            organized, handling members, and making sure the
+            community stays active and structured.
+          </p>
+
+        </div>
+
+        <div class="service-card">
+
+          <div class="service-number">
+            SERVICE_02
+          </div>
+
+          <h3>
+            Discord Management
+          </h3>
+
+          <p>
+            Managing Discord servers, organizing channels and
+            roles, improving server structure, and helping
+            maintain a clean community environment.
+          </p>
+
+        </div>
+
+        <div class="service-card">
+
+          <div class="service-number">
+            SERVICE_03
+          </div>
+
+          <h3>
+            Social Media Management
+          </h3>
+
+          <p>
+            Helping with social media organization, content
+            management, community interaction, and maintaining
+            an active online presence.
+          </p>
+
+        </div>
+
+        <div class="service-card">
+
+          <div class="service-number">
+            SERVICE_04
+          </div>
+
+          <h3>
+            Server Setup
+          </h3>
+
+          <p>
+            Setting up Discord servers with organized channels,
+            roles, permissions, categories, and systems designed
+            around the community.
+          </p>
+
+        </div>
+
+        <div class="service-card">
+
+          <div class="service-number">
+            SERVICE_05
+          </div>
+
+          <h3>
+            Moderation
+          </h3>
+
+          <p>
+            Helping communities stay organized by handling
+            moderation, member issues, rules, and day-to-day
+            community management.
+          </p>
+
+        </div>
+
+        <div class="service-card">
+
+          <div class="service-number">
+            SERVICE_06
+          </div>
+
+          <h3>
+            Digital Projects
+          </h3>
+
+          <p>
+            Working on websites, online projects, community
+            systems, digital organization, and other technical
+            or creative projects.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- GAME PROTECTION -->
+    <section>
+
+      <div class="section-title">
+        GAME PROTECTION
+      </div>
+
+      <div class="dmca-box">
+
+        <div class="dmca-label">
+          DMCA / GAME RESEARCH
+        </div>
 
         <p>
-          Server organization, channels,
-          roles, permissions, moderation
-          systems, and general Discord
-          management.
+          I have also recently started helping with the DMCA
+          process for games. I begin by researching games on
+          Roblox and looking for games that may have names or
+          branding similar to an existing project. From there,
+          I review the game and look for potential unauthorized
+          use of assets or other material. I organize the
+          information I find so that the appropriate rights holder
+          can review the situation and decide what action to take.
         </p>
 
       </div>
 
+    </section>
 
-      <div class="service-card">
+  </main>
 
-        <h2>
-          Social Media Management
-        </h2>
+  <!-- MEDIA CONTROLS -->
+  <div class="media-controls">
 
-        <p>
-          Helping organize social media
-          communities, manage interactions,
-          and maintain a consistent online
-          presence.
-        </p>
+    <button
+      id="music-toggle"
+      class="media-button"
+      type="button"
+    >
+      ♫ MUSIC
+    </button>
 
-      </div>
+    <span id="music-status">
+      OFF
+    </span>
 
+    <button
+      id="video-mute"
+      class="media-button"
+      type="button"
+    >
+      VIDEO
+    </button>
 
-      <div class="service-card">
+  </div>
 
-        <h2>
-          Server Setup
-        </h2>
-
-        <p>
-          Building organized Discord servers
-          with useful channels, roles,
-          permissions, moderation systems,
-          and clean layouts.
-        </p>
-
-      </div>
-
-
-      <div class="service-card">
-
-        <h2>
-          Moderation
-        </h2>
-
-        <p>
-          Helping enforce community rules,
-          dealing with problems, assisting
-          members, and keeping communities
-          under control.
-        </p>
-
-      </div>
-
-
-      <div class="service-card">
-
-        <h2>
-          Digital Projects
-        </h2>
-
-        <p>
-          Websites, online projects,
-          community ideas, organization,
-          research, and other digital work.
-        </p>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       DMCA
-  ========================= -->
-
-  <section class="section">
-
-    <h2 class="section-title">
-      GAME PROTECTION
-    </h2>
-
-    <div class="dmca-box">
-
-      <h2>
-        DMCA & GAME RESEARCH
-      </h2>
-
-      <p>
-        I have also recently started helping
-        with the DMCA process for games.
-      </p>
-
-      <p>
-        I begin by researching games on
-        Roblox and looking for games that
-        may have names or branding similar
-        to an existing project.
-      </p>
-
-      <p>
-        From there, I review the game and
-        look for potential unauthorized use
-        of assets or other material.
-      </p>
-
-      <p>
-        I organize the information I find
-        so that the appropriate rights holder
-        can review the situation and decide
-        what action to take.
-      </p>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       FOOTER
-  ========================= -->
-
+  <!-- FOOTER -->
   <footer>
-    VOLTAGE. // <span>THANKS FOR VISITING</span>
+
+    <div>
+      VOLTAGE
+    </div>
+
+    <br>
+
+    <div>
+      Built with <span>♥</span> and too much Minecraft.
+    </div>
+
   </footer>
 
-</div>
+  <script>
+    const video = document.getElementById("background-video");
+    const music = document.getElementById("background-music");
 
+    const startScreen = document.getElementById("start-screen");
 
-<!-- =========================
-     MUSIC SCRIPT
-========================= -->
+    const musicToggle = document.getElementById("music-toggle");
+    const musicStatus = document.getElementById("music-status");
 
-<script>
+    const videoMute = document.getElementById("video-mute");
 
-const music =
-  document.getElementById('background-music');
+    /* =========================
+       DEFAULT MEDIA SETTINGS
+    ========================= */
 
-const musicButton =
-  document.getElementById('music-button');
+    video.muted = true;
+    video.volume = 0.5;
 
-music.volume = 0.35;
+    music.volume = 0.25;
 
+    /* =========================
+       START PAGE
+    ========================= */
 
-/* Try autoplay */
+    async function startPage() {
 
-window.addEventListener('load', function() {
+      /* Start video */
 
-  music.play()
-    .then(function() {
+      try {
+        await video.play();
+      } catch (error) {
+        console.log("Video autoplay blocked:", error);
+      }
 
-      musicButton.textContent =
-        '♫ MUSIC ON';
+      /* Start music */
 
-    })
-    .catch(function() {
+      try {
 
-      musicButton.textContent =
-        '♫ PLAY MUSIC';
+        await music.play();
 
-    });
+        musicStatus.textContent = "ON";
+        musicToggle.textContent = "♫ MUSIC ON";
 
-});
+      } catch (error) {
 
+        console.log("Music autoplay blocked:", error);
 
-/* Music toggle */
+        musicStatus.textContent = "OFF";
+        musicToggle.textContent = "♫ PLAY MUSIC";
 
-function toggleMusic() {
+      }
 
-  if (music.paused) {
+      /* Hide start screen */
 
-    music.play()
-      .then(function() {
+      startScreen.classList.add("hidden");
+    }
 
-        musicButton.textContent =
-          '♫ MUSIC ON';
+    startScreen.addEventListener(
+      "click",
+      startPage
+    );
 
-      })
-      .catch(function() {
+    /* =========================
+       MUSIC TOGGLE
+    ========================= */
 
-        musicButton.textContent =
-          '♫ PLAY MUSIC';
+    musicToggle.addEventListener(
+      "click",
+      async function () {
 
-      });
+        if (music.paused) {
 
-  } else {
+          try {
 
-    music.pause();
+            await music.play();
 
-    musicButton.textContent =
-      '♫ MUSIC OFF';
+            musicStatus.textContent = "ON";
+            musicToggle.textContent = "♫ MUSIC ON";
 
-  }
+          } catch (error) {
 
-}
+            console.log("Music could not play:", error);
 
-</script>
+          }
+
+        } else {
+
+          music.pause();
+
+          musicStatus.textContent = "OFF";
+          musicToggle.textContent = "♫ PLAY MUSIC";
+
+        }
+
+      }
+    );
+
+    /* =========================
+       VIDEO MUTE
+    ========================= */
+
+    videoMute.addEventListener(
+      "click",
+      function () {
+
+        video.muted = !video.muted;
+
+        if (video.muted) {
+
+          videoMute.textContent = "VIDEO MUTED";
+
+        } else {
+
+          videoMute.textContent = "VIDEO SOUND";
+
+        }
+
+      }
+    );
+
+    /* =========================
+       KEEP VIDEO PLAYING
+    ========================= */
+
+    video.addEventListener(
+      "pause",
+      function () {
+
+        video.play().catch(() => {});
+
+      }
+    );
+
+  </script>
 
 </body>
 </html>
