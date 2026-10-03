@@ -45,12 +45,6 @@ function initMedia() {
     return;
   }
 
-  /*
-   * Before the user clicks the start screen,
-   * keep the video muted so the browser allows
-   * the background video to autoplay.
-   */
-
   backgroundVideo.muted = true;
   backgroundVideo.volume = 0.5;
 
@@ -62,11 +56,6 @@ function initMedia() {
   });
 
   if (musicPlayer) {
-
-    /*
-     * Music will start at 25% after
-     * the user clicks the start screen.
-     */
 
     musicPlayer.volume = 0.25;
     musicPlayer.pause();
@@ -234,11 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function previousSong() {
 
-    /*
-     * If the song has already played for
-     * more than 3 seconds, restart it.
-     */
-
     if (musicPlayer.currentTime > 3) {
 
       musicPlayer.currentTime = 0;
@@ -322,27 +306,13 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
 
-  /*
-   * Automatically move to the
-   * next song when one ends.
-   */
-
   musicPlayer.addEventListener(
     'ended',
     nextSong
   );
 
 
-  /*
-   * Load first song.
-   */
-
   musicPlayer.volume = 0.25;
-
-  /*
-   * Make the slider show 25%
-   * when the site first loads.
-   */
 
   musicVolume.value = 0.25;
 
@@ -436,12 +406,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   );
 
-
-  /*
-   * Initial video volume is 50%.
-   * It starts muted until the user
-   * clicks the start screen.
-   */
 
   backgroundVideo.volume = 0.50;
 
@@ -693,7 +657,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* =========================
      ENTER SITE
-========================= */
+  ========================= */
 
   let siteEntered = false;
 
@@ -703,11 +667,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (siteEntered) return;
 
     siteEntered = true;
-
-    /*
-     * This click counts as user interaction,
-     * so browsers allow audio to start.
-     */
 
     hasUserInteracted = true;
 
@@ -1240,11 +1199,6 @@ document.addEventListener('DOMContentLoaded', () => {
             true;
 
 
-          /*
-           * Preserve video audio settings
-           * when changing themes.
-           */
-
           backgroundVideo.muted =
             wasMuted;
 
@@ -1606,6 +1560,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
   );
+
+
+  /* =========================
+     RETRACTABLE BANNER
+  ========================= */
+
+  const heroBanner =
+    document.getElementById('hero-banner');
+
+  const heroBannerWrapper =
+    document.getElementById('hero-banner-wrapper');
+
+
+  if (
+    heroBanner &&
+    heroBannerWrapper
+  ) {
+
+    let originalBannerHeight =
+      heroBannerWrapper.offsetHeight;
+
+
+    function updateBanner() {
+
+      const scrollAmount =
+        Math.min(
+          window.scrollY,
+          originalBannerHeight
+        );
+
+      const newHeight =
+        Math.max(
+          0,
+          originalBannerHeight - scrollAmount
+        );
+
+      heroBanner.style.height =
+        newHeight + 'px';
+
+    }
+
+
+    window.addEventListener(
+      'scroll',
+      updateBanner,
+      { passive: true }
+    );
+
+
+    window.addEventListener(
+      'resize',
+      () => {
+
+        heroBannerWrapper.style.height =
+          'min(33.333vw, 500px)';
+
+        originalBannerHeight =
+          heroBannerWrapper.offsetHeight;
+
+        updateBanner();
+
+      }
+    );
+
+
+    updateBanner();
+
+  }
 
 
   /* =========================
