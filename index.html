@@ -615,6 +615,64 @@ body {
 }
 
 /* =========================
+   PANEL BUTTONS
+========================= */
+
+.panel-buttons {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-top: 5px;
+}
+
+.panel-button {
+  background: rgba(59,130,246,0.1);
+
+  color: rgba(255,255,255,0.75);
+
+  border: 1px solid rgba(59,130,246,0.25);
+
+  padding: 7px 16px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-family: 'Courier New', monospace;
+
+  font-size: 12px;
+
+  letter-spacing: 1.5px;
+
+  transition: all 0.2s;
+
+  text-transform: uppercase;
+
+  text-decoration: none;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.panel-button:hover {
+  background: rgba(59,130,246,0.18);
+
+  border-color: rgba(59,130,246,0.45);
+
+  color: #fff;
+
+  transform: translateY(-1px);
+}
+
+/* =========================
    RESUME
 ========================= */
 
@@ -1141,6 +1199,16 @@ body {
     font-size: 12px;
   }
 
+  .panel-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .panel-button {
+    padding: 7px 12px;
+    font-size: 10px;
+  }
+
   .media-controls {
     bottom: 12px;
 
@@ -1207,9 +1275,7 @@ body {
 </head>
 
 <body class="home-theme" onload="initMedia()">
-<a href="services.html" class="services-button">
-  SERVICES
-</a>
+
 <!-- =========================
      BANNER
 ========================= -->
@@ -1505,6 +1571,7 @@ body {
         style="
           display:flex;
           align-items:center;
+          justify-content:center;
           gap:10px;
           flex-wrap:wrap;
         "
@@ -1551,56 +1618,59 @@ body {
 
         </div>
 
-        <button
-          id="view-resume-btn"
-          onclick="
-            (function(){
+        <!-- =========================
+             PANEL BUTTONS
+        ========================= -->
 
-              var p =
-                document.getElementById('profile-block');
+        <div class="panel-buttons">
 
-              var r =
-                document.getElementById('resume-block');
+          <button
+            id="view-resume-btn"
+            onclick="
+              (function(){
 
-              var btn =
-                document.getElementById('view-resume-btn');
+                var p =
+                  document.getElementById('profile-block');
 
-              if(r.classList.contains('hidden')){
+                var r =
+                  document.getElementById('resume-block');
 
-                p.classList.add('hidden');
+                var btn =
+                  document.getElementById('view-resume-btn');
 
-                r.classList.remove('hidden');
+                if(r.classList.contains('hidden')){
 
-                btn.textContent='← Back';
+                  p.classList.add('hidden');
 
-              } else {
+                  r.classList.remove('hidden');
 
-                r.classList.add('hidden');
+                  btn.textContent='← Back';
 
-                p.classList.remove('hidden');
+                } else {
 
-                btn.textContent='View Resume';
+                  r.classList.add('hidden');
 
-              }
+                  p.classList.remove('hidden');
 
-            })()
-          "
-          style="
-            background:rgba(59,130,246,0.1);
-            color:rgba(255,255,255,0.75);
-            border:1px solid rgba(59,130,246,0.25);
-            padding:7px 16px;
-            border-radius:10px;
-            cursor:pointer;
-            font-family:'Courier New',monospace;
-            font-size:12px;
-            letter-spacing:1.5px;
-            transition:all 0.2s;
-            text-transform:uppercase;
-          "
-        >
-          View Resume
-        </button>
+                  btn.textContent='View Resume';
+
+                }
+
+              })()
+            "
+            class="panel-button"
+          >
+            View Resume
+          </button>
+
+          <a
+            href="services.html"
+            class="panel-button"
+          >
+            Services
+          </a>
+
+        </div>
 
       </div>
 
