@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,6 +8,7 @@
 <title>Services — Voltage.</title>
 
 <style>
+
 * {
   margin: 0;
   padding: 0;
@@ -14,20 +16,59 @@
   font-family: 'Courier New', monospace;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   min-height: 100vh;
   background: #000;
   color: #fff;
   padding: 40px;
+  overflow-x: hidden;
 }
+
+/* Background glow */
+
+body::before {
+  content: "";
+  position: fixed;
+  width: 700px;
+  height: 700px;
+  top: -300px;
+  left: -300px;
+  background: rgba(59,130,246,0.08);
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  bottom: -300px;
+  right: -300px;
+  background: rgba(0,150,255,0.06);
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+/* Main */
 
 .services-page {
   max-width: 1100px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
+/* Back button */
+
 .back-button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 
   color: rgba(255,255,255,0.7);
   text-decoration: none;
@@ -44,56 +85,225 @@ body {
 
 .back-button:hover {
   color: #fff;
-  border-color: rgba(255,255,255,0.6);
-  background: rgba(255,255,255,0.08);
+  border-color: rgba(59,130,246,0.6);
+  background: rgba(59,130,246,0.08);
+  transform: translateX(-2px);
+}
+
+/* Header */
+
+.page-header {
+  margin-top: 75px;
+  margin-bottom: 55px;
+}
+
+.page-label {
+  color: rgba(59,130,246,0.8);
+  font-size: 11px;
+  letter-spacing: 4px;
+  margin-bottom: 14px;
 }
 
 h1 {
-  margin-top: 80px;
-  font-size: 48px;
-  letter-spacing: 5px;
+  font-size: clamp(42px, 7vw, 76px);
+  letter-spacing: 6px;
+  line-height: 1;
 }
 
 .subtitle {
-  margin-top: 10px;
-  color: rgba(255,255,255,0.5);
+  margin-top: 18px;
+  color: rgba(255,255,255,0.45);
+  font-size: 13px;
+  letter-spacing: 1px;
 }
 
-.services-grid {
-  margin-top: 50px;
+/* About */
 
+.section {
+  margin-bottom: 55px;
+}
+
+.section-title {
+  font-size: 22px;
+  letter-spacing: 3px;
+  margin-bottom: 18px;
+}
+
+.section-title::before {
+  content: "// ";
+  color: rgba(59,130,246,0.7);
+}
+
+.about-box {
+  padding: 30px;
+
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  border-radius: 16px;
+
+  line-height: 1.8;
+  color: rgba(255,255,255,0.65);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.35),
+    inset 0 0 30px rgba(255,255,255,0.015);
+}
+
+.about-box p {
+  margin-bottom: 18px;
+}
+
+.about-box p:last-child {
+  margin-bottom: 0;
+}
+
+.highlight {
+  color: #fff;
+}
+
+/* Services grid */
+
+.services-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
 }
 
 .service-card {
-  padding: 30px;
+  position: relative;
 
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.15);
+  padding: 28px;
+
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.12);
 
   border-radius: 15px;
 
+  transition:
+    transform 0.25s,
+    border-color 0.25s,
+    background 0.25s;
+
+  overflow: hidden;
+}
+
+.service-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 2px;
+  height: 100%;
+
+  background: rgba(59,130,246,0.5);
+
+  opacity: 0;
   transition: 0.25s;
 }
 
 .service-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.08);
+
+  border-color: rgba(59,130,246,0.35);
+
+  background: rgba(59,130,246,0.045);
+}
+
+.service-card:hover::before {
+  opacity: 1;
+}
+
+.service-number {
+  color: rgba(59,130,246,0.65);
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
 }
 
 .service-card h2 {
   font-size: 18px;
   margin-bottom: 12px;
+  letter-spacing: 1px;
 }
 
 .service-card p {
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* DMCA section */
+
+.dmca-box {
+  padding: 30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(59,130,246,0.06),
+      rgba(255,255,255,0.025)
+    );
+
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 16px;
+}
+
+.dmca-box h2 {
+  font-size: 19px;
+  margin-bottom: 14px;
+}
+
+.dmca-box p {
   color: rgba(255,255,255,0.55);
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.8;
 }
+
+/* Footer */
+
+.page-footer {
+  margin-top: 70px;
+  padding-top: 25px;
+
+  border-top: 1px solid rgba(255,255,255,0.1);
+
+  color: rgba(255,255,255,0.3);
+
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+/* Watermark */
+
+.watermark {
+  position: fixed;
+
+  right: 18px;
+  bottom: 15px;
+
+  width: 70px;
+  height: 70px;
+
+  object-fit: contain;
+
+  opacity: 0.45;
+
+  pointer-events: none;
+
+  z-index: 100;
+
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.8));
+
+  transition: opacity 0.2s;
+}
+
+.watermark:hover {
+  opacity: 0.7;
+}
+
+/* Mobile */
 
 @media (max-width: 700px) {
 
@@ -101,15 +311,34 @@ h1 {
     padding: 20px;
   }
 
+  .page-header {
+    margin-top: 55px;
+    margin-bottom: 40px;
+  }
+
   h1 {
-    font-size: 34px;
-    margin-top: 50px;
+    font-size: 42px;
+    letter-spacing: 4px;
   }
 
   .services-grid {
     grid-template-columns: 1fr;
   }
+
+  .about-box,
+  .dmca-box,
+  .service-card {
+    padding: 22px;
+  }
+
+  .watermark {
+    width: 55px;
+    height: 55px;
+    right: 12px;
+    bottom: 10px;
+  }
 }
+
 </style>
 
 </head>
@@ -118,45 +347,251 @@ h1 {
 
 <div class="services-page">
 
+  <!-- Back -->
+
   <a href="index.html" class="back-button">
     ← BACK
   </a>
 
-  <h1>SERVICES</h1>
+  <!-- Header -->
 
-  <p class="subtitle">
-    What I can help with.
+  <div class="page-header">
+
+```
+<div class="page-label">
+  VOLTAGE.
+</div>
+
+<h1>SERVICES</h1>
+
+<p class="subtitle">
+  Community. Management. Digital work.
+</p>
+```
+
+  </div>
+
+  <!-- About Me -->
+
+  <section class="section">
+
+```
+<h2 class="section-title">
+  ABOUT ME
+</h2>
+
+<div class="about-box">
+
+  <p>
+    I have been involved with
+    <span class="highlight">Discord for over 6 years</span>
+    and have gained experience working with different communities,
+    servers, creators, and projects.
   </p>
 
-  <div class="services-grid">
+  <p>
+    Over the years, I have become a valuable asset to many people
+    through my experience with management, moderation, organization,
+    and online communities.
+  </p>
 
-    <div class="service-card">
-      <h2>Community Management</h2>
-      <p>
-        Discord moderation, community management,
-        member support, and server organization.
-      </p>
+  <p>
+    I am passionate about what I do and I am always glad to help out
+    when I can. I enjoy working with people, solving problems, and
+    helping projects become more organized and successful.
+  </p>
+
+  <p>
+    I do many different things, including
+    <span class="highlight">
+      social media management, community management,
+      Discord management, moderation, server organization,
+      and other digital work.
+    </span>
+  </p>
+
+</div>
+```
+
+  </section>
+
+  <!-- Services -->
+
+  <section class="section">
+
+```
+<h2 class="section-title">
+  WHAT I DO
+</h2>
+
+<div class="services-grid">
+
+  <div class="service-card">
+
+    <div class="service-number">
+      01
     </div>
 
-    <div class="service-card">
-      <h2>Discord Setup</h2>
-      <p>
-        Server structure, roles, channels,
-        moderation systems, and organization.
-      </p>
+    <h2>
+      Community Management
+    </h2>
+
+    <p>
+      Helping manage online communities, keeping things organized,
+      handling member interactions, and helping create a better
+      environment for the community.
+    </p>
+
+  </div>
+
+
+  <div class="service-card">
+
+    <div class="service-number">
+      02
     </div>
 
-    <div class="service-card">
-      <h2>Social Media</h2>
-      <p>
-        Social media management, organization,
-        and community growth support.
-      </p>
+    <h2>
+      Discord Management
+    </h2>
+
+    <p>
+      Managing Discord servers, organizing channels and roles,
+      handling moderation, and helping keep servers running smoothly.
+    </p>
+
+  </div>
+
+
+  <div class="service-card">
+
+    <div class="service-number">
+      03
     </div>
+
+    <h2>
+      Social Media Management
+    </h2>
+
+    <p>
+      Helping manage social media communities, organize content,
+      interact with audiences, and maintain an active online presence.
+    </p>
+
+  </div>
+
+
+  <div class="service-card">
+
+    <div class="service-number">
+      04
+    </div>
+
+    <h2>
+      Server Setup
+    </h2>
+
+    <p>
+      Setting up and organizing Discord servers with channels,
+      roles, permissions, moderation systems, and a structure
+      that fits the community.
+    </p>
+
+  </div>
+
+
+  <div class="service-card">
+
+    <div class="service-number">
+      05
+    </div>
+
+    <h2>
+      Moderation
+    </h2>
+
+    <p>
+      Helping communities stay organized through moderation,
+      member support, conflict handling, and enforcement of
+      community rules.
+    </p>
+
+  </div>
+
+
+  <div class="service-card">
+
+    <div class="service-number">
+      06
+    </div>
+
+    <h2>
+      Digital Projects
+    </h2>
+
+    <p>
+      Helping with various online projects, organization,
+      management, and other digital tasks depending on what
+      the project needs.
+    </p>
 
   </div>
 
 </div>
+```
+
+  </section>
+
+  <!-- DMCA -->
+
+  <section class="section">
+
+```
+<h2 class="section-title">
+  DMCA & GAME PROTECTION
+</h2>
+
+<div class="dmca-box">
+
+  <h2>
+    Roblox Game Research
+  </h2>
+
+  <p>
+    I have also recently started helping with the DMCA process
+    for games. I begin by researching games on Roblox and looking
+    for games that may have names or branding similar to an existing
+    project. From there, I review the game and look for potential
+    unauthorized use of assets or other material.
+  </p>
+
+  <p style="margin-top: 15px;">
+    The goal is to identify potential issues and organize the
+    information needed for the appropriate rights holder to review
+    and pursue the proper process.
+  </p>
+
+</div>
+```
+
+  </section>
+
+  <!-- Footer -->
+
+  <div class="page-footer">
+    VOLTAGE. — DIGITAL SERVICES
+  </div>
+
+</div>
+
+<!-- Bottom-right watermark -->
+
+<img
+src="yesyes.jpg"
+alt=""
+class="watermark"
+
+>
 
 </body>
 </html>
