@@ -6,9 +6,6 @@
 
     <title>Services | Voltage</title>
 
-    <!-- GSAP - SAME LIBRARY USED BY YOUR MAIN SITE -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
     <style>
 
         @font-face {
@@ -48,10 +45,8 @@
             object-fit: cover;
 
             z-index: -3;
-
             pointer-events: none;
         }
-
 
         #video-overlay {
             position: fixed;
@@ -60,21 +55,14 @@
             background: rgba(0, 0, 0, 0.55);
 
             z-index: -2;
-
             pointer-events: none;
         }
-
-
-        /* =========================
-           PIXEL OVERLAY
-        ========================= */
 
         #pixel-overlay {
             position: fixed;
             inset: 0;
 
             z-index: -1;
-
             pointer-events: none;
 
             background-image:
@@ -98,7 +86,6 @@
 
         #start-screen {
             position: fixed;
-
             inset: 0;
 
             width: 100%;
@@ -107,7 +94,6 @@
             background: #000;
 
             display: flex;
-
             align-items: center;
             justify-content: center;
 
@@ -116,11 +102,15 @@
             cursor: pointer;
 
             opacity: 1;
+            visibility: visible;
+
+            transition:
+                opacity 0.7s ease,
+                visibility 0.7s ease;
         }
 
-
         #start-text {
-            color: white;
+            color: #fff;
 
             font-family: "Minecraft", monospace;
 
@@ -129,8 +119,9 @@
             user-select: none;
         }
 
-
         #start-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
             pointer-events: none;
         }
 
@@ -170,14 +161,12 @@
             width: 100%;
 
             display: flex;
-
             justify-content: center;
 
             gap: 40px;
 
             padding: 25px 20px;
         }
-
 
         nav a {
             color: white;
@@ -193,10 +182,8 @@
             transition: 0.2s;
         }
 
-
         nav a:hover {
             border-color: #55ff55;
-
             color: #55ff55;
         }
 
@@ -209,7 +196,6 @@
             min-height: 65vh;
 
             display: flex;
-
             align-items: center;
             justify-content: center;
 
@@ -221,7 +207,6 @@
 
             z-index: 2;
         }
-
 
         .hero h1 {
             font-size: clamp(45px, 10vw, 110px);
@@ -235,16 +220,14 @@
             margin-bottom: 20px;
         }
 
-
         .hero p {
             font-size: 16px;
-
             color: #ddd;
         }
 
 
         /* =========================
-           CONTENT
+           MAIN CONTENT
         ========================= */
 
         .container {
@@ -259,11 +242,9 @@
             padding-bottom: 100px;
         }
 
-
         section {
             margin-bottom: 90px;
         }
-
 
         .section-title {
             color: #55ff55;
@@ -274,7 +255,6 @@
 
             text-shadow: 3px 3px #111;
         }
-
 
         .section-text {
             font-family: Arial, sans-serif;
@@ -290,7 +270,7 @@
 
 
         /* =========================
-           SERVICES
+           SERVICES GRID
         ========================= */
 
         .services-grid {
@@ -301,7 +281,6 @@
 
             gap: 20px;
         }
-
 
         .service-card {
             background: rgba(0, 0, 0, 0.78);
@@ -318,7 +297,6 @@
                 background 0.2s;
         }
 
-
         .service-card:hover {
             transform: translateY(-5px);
 
@@ -327,7 +305,6 @@
             background: rgba(0, 20, 0, 0.85);
         }
 
-
         .service-card h3 {
             color: #55ff55;
 
@@ -335,7 +312,6 @@
 
             margin-bottom: 15px;
         }
-
 
         .service-card p {
             font-family: Arial, sans-serif;
@@ -358,8 +334,9 @@
             border: 2px solid #333;
 
             padding: 35px;
-        }
 
+            transition: border-color 0.2s;
+        }
 
         .dmca:hover {
             border-color: #55ff55;
@@ -380,8 +357,7 @@
             padding: 40px 20px;
 
             border-top:
-                2px solid
-                rgba(85, 255, 85, 0.25);
+                2px solid rgba(85, 255, 85, 0.25);
 
             color: #888;
 
@@ -402,7 +378,6 @@
             z-index: 1000;
 
             display: flex;
-
             align-items: center;
 
             gap: 10px;
@@ -418,7 +393,6 @@
             font-size: 12px;
         }
 
-
         .media-button {
             background: transparent;
 
@@ -433,13 +407,11 @@
             cursor: pointer;
         }
 
-
         .media-button:hover {
             border-color: #55ff55;
 
             color: #55ff55;
         }
-
 
         #music-status {
             color: #55ff55;
@@ -481,6 +453,9 @@
                 bottom: 10px;
             }
 
+            #start-text {
+                font-size: 28px;
+            }
         }
 
     </style>
@@ -492,7 +467,6 @@
 
     <!-- =========================
          START SCREEN
-         SAME CONCEPT AS INDEX
     ========================= -->
 
     <div id="start-screen">
@@ -501,28 +475,25 @@
 
 
     <!-- =========================
-         VIDEO
+         BACKGROUND VIDEO
     ========================= -->
 
     <video
         id="background-video"
+        autoplay
         loop
         muted
         playsinline
         webkit-playsinline
         preload="auto"
     >
-
         <source
             src="assets/background2.mp4"
             type="video/mp4"
         >
-
     </video>
 
-
     <div id="video-overlay"></div>
-
     <div id="pixel-overlay"></div>
 
 
@@ -538,7 +509,7 @@
 
 
     <!-- =========================
-         NAV
+         NAVIGATION
     ========================= -->
 
     <nav>
@@ -582,6 +553,8 @@
     <main class="container">
 
 
+        <!-- ABOUT -->
+
         <section>
 
             <h2 class="section-title">
@@ -602,12 +575,13 @@
         </section>
 
 
+        <!-- SERVICES -->
+
         <section>
 
             <h2 class="section-title">
                 WHAT I DO
             </h2>
-
 
             <div class="services-grid">
 
@@ -701,17 +675,17 @@
         </section>
 
 
+        <!-- GAME PROTECTION -->
+
         <section>
 
             <h2 class="section-title">
                 GAME PROTECTION / DMCA
             </h2>
 
-
             <div class="dmca">
 
                 <p class="section-text">
-
                     I have also recently started helping with the DMCA process
                     for games. I begin by researching games on Roblox and
                     looking for games that may have names or branding similar
@@ -720,7 +694,6 @@
                     material. I organize the information I find so that the
                     appropriate rights holder can review the situation and
                     decide what action to take.
-
                 </p>
 
             </div>
@@ -730,6 +703,10 @@
 
     </main>
 
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
 
     <footer>
         Voltage © 2026
@@ -745,17 +722,15 @@
         preload="auto"
         loop
     >
-
         <source
             src="assets/music/wethands.mp3"
             type="audio/mpeg"
         >
-
     </audio>
 
 
     <!-- =========================
-         CONTROLS
+         MEDIA CONTROLS
     ========================= -->
 
     <div id="media-controls">
@@ -784,52 +759,49 @@
 
 
     <!-- =========================
-         STARTUP SCRIPT
-         BASED ON INDEX SYSTEM
+         JAVASCRIPT
     ========================= -->
 
     <script>
 
         document.addEventListener(
             "DOMContentLoaded",
-            function() {
+            function () {
 
+
+                /* =========================
+                   ELEMENTS
+                ========================= */
 
                 const startScreen =
                     document.getElementById(
                         "start-screen"
                     );
 
-
                 const startText =
                     document.getElementById(
                         "start-text"
                     );
 
-
-                const backgroundVideo =
+                const video =
                     document.getElementById(
                         "background-video"
                     );
 
-
-                const musicPlayer =
+                const music =
                     document.getElementById(
                         "background-music"
                     );
-
 
                 const musicButton =
                     document.getElementById(
                         "music-button"
                     );
 
-
                 const musicStatus =
                     document.getElementById(
                         "music-status"
                     );
-
 
                 const videoButton =
                     document.getElementById(
@@ -837,18 +809,35 @@
                     );
 
 
+                let siteEntered = false;
+
+
                 /* =========================
-                   START SCREEN TEXT
+                   INITIAL VIDEO SETTINGS
+                ========================= */
+
+                video.muted = true;
+                video.volume = 0;
+                video.loop = true;
+
+
+                /* =========================
+                   INITIAL MUSIC SETTINGS
+                ========================= */
+
+                music.volume = 0.25;
+                music.loop = true;
+
+
+                /* =========================
+                   START SCREEN TYPEWRITER
                 ========================= */
 
                 const startMessage =
                     "click to enter...";
 
-
                 let startTextContent = "";
-
                 let startIndex = 0;
-
                 let startCursorVisible = true;
 
 
@@ -879,20 +868,33 @@
                         );
 
 
-                    setTimeout(
-                        typeWriterStart,
-                        100
-                    );
+                    if (
+                        startIndex <
+                        startMessage.length
+                    ) {
+
+                        setTimeout(
+                            typeWriterStart,
+                            100
+                        );
+
+                    }
 
                 }
 
 
+                typeWriterStart();
+
+
+                /* =========================
+                   CURSOR BLINK
+                ========================= */
+
                 setInterval(
-                    function() {
+                    function () {
 
                         startCursorVisible =
                             !startCursorVisible;
-
 
                         startText.textContent =
                             startTextContent +
@@ -907,137 +909,96 @@
                 );
 
 
-                typeWriterStart();
-
-
-                /* =========================
-                   INITIAL MEDIA
-                ========================= */
-
-                backgroundVideo.muted = true;
-
-                backgroundVideo.volume = 0;
-
-
-                backgroundVideo.play()
-                    .catch(
-                        function(error) {
-
-                            console.log(
-                                "Video waiting for interaction:",
-                                error
-                            );
-
-                        }
-                    );
-
-
-                musicPlayer.volume = 0.25;
-
-                musicPlayer.pause();
-
-
                 /* =========================
                    ENTER SITE
                 ========================= */
 
-                let siteEntered = false;
-
-
-                function enterSite() {
+                async function enterSite() {
 
                     if (siteEntered) {
                         return;
                     }
 
-
                     siteEntered = true;
 
 
-                    /* =========================
-                       MUSIC
-                    ========================= */
+                    /* VIDEO */
 
-                    musicPlayer.volume = 0.25;
+                    video.muted = true;
+                    video.volume = 0;
 
+                    try {
 
-                    musicPlayer.play()
-                        .then(
-                            function() {
+                        await video.play();
 
-                                musicStatus.textContent =
-                                    "ON";
-
-                            }
-                        )
-                        .catch(
-                            function(error) {
-
-                                console.error(
-                                    "Failed to start music:",
-                                    error
-                                );
-
-                                musicStatus.textContent =
-                                    "OFF";
-
-                            }
+                        console.log(
+                            "Background video started"
                         );
 
+                    }
 
-                    /* =========================
-                       VIDEO
-                       ALWAYS MUTED
-                    ========================= */
+                    catch (error) {
 
-                    backgroundVideo.muted = true;
-
-                    backgroundVideo.volume = 0;
-
-
-                    backgroundVideo.play()
-                        .catch(
-                            function(error) {
-
-                                console.error(
-                                    "Failed to start video:",
-                                    error
-                                );
-
-                            }
+                        console.error(
+                            "Background video error:",
+                            error
                         );
 
+                    }
 
-                    /* =========================
-                       HIDE START SCREEN
-                       SAME GSAP STYLE AS INDEX
-                    ========================= */
 
-                    gsap.to(
-                        startScreen,
-                        {
-                            opacity: 0,
+                    /* MUSIC */
 
-                            duration: 0.5,
+                    music.volume = 0.25;
 
-                            onComplete: function() {
+                    try {
 
-                                startScreen.classList.add(
-                                    "hidden"
-                                );
+                        await music.play();
 
-                                startScreen.style.display =
-                                    "none";
+                        musicStatus.textContent =
+                            "ON";
 
-                            }
-                        }
+                        console.log(
+                            "Wet Hands started"
+                        );
+
+                    }
+
+                    catch (error) {
+
+                        musicStatus.textContent =
+                            "OFF";
+
+                        console.error(
+                            "Music error:",
+                            error
+                        );
+
+                    }
+
+
+                    /* FADE START SCREEN */
+
+                    startScreen.classList.add(
+                        "hidden"
+                    );
+
+
+                    setTimeout(
+                        function () {
+
+                            startScreen.style.display =
+                                "none";
+
+                        },
+                        700
                     );
 
                 }
 
 
                 /* =========================
-                   CLICK
+                   START SCREEN CLICK
                 ========================= */
 
                 startScreen.addEventListener(
@@ -1047,12 +1008,12 @@
 
 
                 /* =========================
-                   TOUCH
+                   TOUCH SUPPORT
                 ========================= */
 
                 startScreen.addEventListener(
                     "touchstart",
-                    function(event) {
+                    function (event) {
 
                         event.preventDefault();
 
@@ -1068,28 +1029,33 @@
 
                 musicButton.addEventListener(
                     "click",
-                    function(event) {
+                    async function () {
 
-                        event.stopPropagation();
+                        if (music.paused) {
 
+                            try {
 
-                        if (
-                            musicPlayer.paused
-                        ) {
+                                await music.play();
 
-                            musicPlayer.play()
-                                .then(
-                                    function() {
+                                musicStatus.textContent =
+                                    "ON";
 
-                                        musicStatus.textContent =
-                                            "ON";
+                            }
 
-                                    }
+                            catch (error) {
+
+                                console.error(
+                                    "Music error:",
+                                    error
                                 );
 
-                        } else {
+                            }
 
-                            musicPlayer.pause();
+                        }
+
+                        else {
+
+                            music.pause();
 
                             musicStatus.textContent =
                                 "OFF";
@@ -1106,17 +1072,10 @@
 
                 videoButton.addEventListener(
                     "click",
-                    function(event) {
+                    function () {
 
-                        event.stopPropagation();
-
-
-                        backgroundVideo.muted =
-                            true;
-
-                        backgroundVideo.volume =
-                            0;
-
+                        video.muted = true;
+                        video.volume = 0;
 
                         videoButton.textContent =
                             "VIDEO MUTED";
@@ -1125,12 +1084,30 @@
                 );
 
 
+                /* =========================
+                   KEEP VIDEO PLAYING
+                ========================= */
+
+                video.addEventListener(
+                    "pause",
+                    function () {
+
+                        if (siteEntered) {
+
+                            video.play().catch(
+                                function () {}
+                            );
+
+                        }
+
+                    }
+                );
+
             }
 
         );
 
     </script>
-
 
 </body>
 </html>
