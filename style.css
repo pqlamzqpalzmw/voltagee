@@ -21,7 +21,12 @@ body {
   perspective: 1000px;
   cursor: none;
 }
-
+@font-face {
+  font-family: 'Minecraft';
+  src: url('minecraft.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 .custom-cursor {
   position: fixed;
