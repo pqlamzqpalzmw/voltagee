@@ -10,22 +10,14 @@
     @font-face {
       font-family: "Minecraft";
       src: url("minecraft.ttf") format("truetype");
-      font-weight: normal;
-      font-style: normal;
     }
 
     :root {
       --green: #55ff55;
       --dark-green: #2f8f2f;
-      --light-green: #8cff8c;
-
       --black: #050505;
       --panel: rgba(8, 8, 8, 0.88);
-      --panel-light: rgba(16, 16, 16, 0.93);
-
       --text: #d8d8d8;
-      --muted: #888;
-
       --border: rgba(85, 255, 85, 0.25);
     }
 
@@ -39,12 +31,9 @@
 
     body {
       margin: 0;
-
-      background: var(--black);
+      background: #050505;
       color: var(--text);
-
       font-family: "Minecraft", monospace;
-
       overflow-x: hidden;
     }
 
@@ -54,9 +43,7 @@
 
     #background-video {
       position: fixed;
-
-      top: 0;
-      left: 0;
+      inset: 0;
 
       width: 100%;
       height: 100%;
@@ -66,11 +53,12 @@
       z-index: -3;
 
       pointer-events: none;
+
+      background: #000;
     }
 
     #video-overlay {
       position: fixed;
-
       inset: 0;
 
       background:
@@ -86,7 +74,6 @@
 
     #pixel-overlay {
       position: fixed;
-
       inset: 0;
 
       background-image:
@@ -105,6 +92,61 @@
       z-index: -1;
 
       pointer-events: none;
+    }
+
+    /* =========================================
+       CLICK TO ENTER
+    ========================================= */
+
+    #start-screen {
+      position: fixed;
+      inset: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #000;
+
+      z-index: 9999;
+
+      cursor: pointer;
+
+      transition:
+        opacity 0.8s ease,
+        visibility 0.8s ease;
+    }
+
+    #start-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    #start-text {
+      color: #fff;
+
+      font-family: "Minecraft", monospace;
+
+      font-size: 34px;
+
+      letter-spacing: 4px;
+
+      text-shadow:
+        0 0 12px rgba(255, 255, 255, 0.35);
+
+      animation: blink 1.4s infinite;
+    }
+
+    @keyframes blink {
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.45;
+      }
     }
 
     /* =========================================
@@ -137,15 +179,12 @@
 
     nav {
       position: sticky;
-
       top: 0;
 
       width: 100%;
 
       display: flex;
-
       align-items: center;
-
       justify-content: space-between;
 
       padding: 15px 25px;
@@ -173,7 +212,6 @@
 
     .nav-links {
       display: flex;
-
       gap: 10px;
     }
 
@@ -208,10 +246,6 @@
 
       padding: 70px 0 100px;
     }
-
-    /* =========================================
-       HERO
-    ========================================= */
 
     .hero {
       min-height: 55vh;
@@ -338,7 +372,7 @@
 
       padding: 25px;
 
-      background: var(--panel-light);
+      background: rgba(16, 16, 16, 0.93);
 
       border: 1px solid var(--border);
 
@@ -545,13 +579,11 @@
 
       .nav-links a {
         padding: 7px 8px;
-
         font-size: 11px;
       }
 
       main {
         width: min(100% - 20px, 700px);
-
         padding-top: 45px;
       }
 
@@ -562,7 +594,6 @@
 
       .media-controls {
         width: calc(100% - 20px);
-
         justify-content: center;
       }
 
@@ -582,11 +613,11 @@
 
   <video
     id="background-video"
-    autoplay
     loop
     muted
     playsinline
     webkit-playsinline
+    preload="auto"
   >
     <source
       src="assets/background2.mp4"
@@ -595,8 +626,36 @@
   </video>
 
   <div id="video-overlay"></div>
-
   <div id="pixel-overlay"></div>
+
+
+  <!-- =========================================
+       CLICK TO ENTER
+  ========================================= -->
+
+  <div id="start-screen">
+
+    <div id="start-text">
+      ...
+    </div>
+
+  </div>
+
+
+  <!-- =========================================
+       MUSIC
+  ========================================= -->
+
+  <audio
+    id="background-music"
+    loop
+    preload="auto"
+  >
+    <source
+      src="assets/music/wethands.mp3"
+      type="audio/mpeg"
+    >
+  </audio>
 
 
   <!-- =========================================
@@ -608,23 +667,6 @@
     src="yesyes.jpg"
     alt="Voltage"
   >
-
-
-  <!-- =========================================
-       MUSIC
-  ========================================= -->
-
-  <audio
-    id="background-music"
-    autoplay
-    loop
-    preload="auto"
-  >
-    <source
-      src="assets/music/wethands.mp3"
-      type="audio/mpeg"
-    >
-  </audio>
 
 
   <!-- =========================================
@@ -661,8 +703,6 @@
 
   <main>
 
-    <!-- HERO -->
-
     <div class="hero">
 
       <h1>
@@ -681,9 +721,7 @@
     <div class="minecraft-line"></div>
 
 
-    <!-- =========================================
-         ABOUT ME
-    ========================================= -->
+    <!-- ABOUT ME -->
 
     <section>
 
@@ -710,9 +748,7 @@
     </section>
 
 
-    <!-- =========================================
-         SERVICES
-    ========================================= -->
+    <!-- SERVICES -->
 
     <section id="services">
 
@@ -842,9 +878,7 @@
     </section>
 
 
-    <!-- =========================================
-         GAME PROTECTION
-    ========================================= -->
+    <!-- GAME PROTECTION -->
 
     <section>
 
@@ -891,7 +925,7 @@
     </button>
 
     <span id="music-status">
-      LOADING
+      OFF
     </span>
 
     <button
@@ -930,6 +964,9 @@
 
   <script>
 
+    const startScreen =
+      document.getElementById("start-screen");
+
     const video =
       document.getElementById("background-video");
 
@@ -947,44 +984,71 @@
 
 
     /* =========================================
-       VIDEO
+       VIDEO SETTINGS
     ========================================= */
 
     video.muted = true;
-
     video.volume = 0;
-
-    video.play().catch(() => {
-      console.log("Video autoplay was blocked.");
-    });
 
 
     /* =========================================
-       MUSIC
+       CLICK TO ENTER
     ========================================= */
 
-    music.volume = 0.25;
+    let started = false;
 
-    music.play()
-      .then(() => {
+    async function enterSite() {
+
+      if (started) {
+        return;
+      }
+
+      started = true;
+
+      /*
+        Both play() calls happen from the SAME
+        user click.
+
+        This is important because browsers
+        allow audio playback after user interaction.
+      */
+
+      try {
+        await video.play();
+      } catch (error) {
+        console.log("Video error:", error);
+      }
+
+
+      try {
+
+        await music.play();
 
         musicStatus.textContent = "ON";
 
-        musicToggle.textContent = "♫ MUSIC ON";
+        musicToggle.textContent =
+          "♫ MUSIC ON";
 
-      })
-      .catch(() => {
+      } catch (error) {
 
-        /*
-          Some browsers block audio autoplay.
-          The music button below can still start it.
-        */
+        console.log("Music error:", error);
 
-        musicStatus.textContent = "CLICK";
+        musicStatus.textContent = "ERROR";
 
-        musicToggle.textContent = "♫ PLAY MUSIC";
+      }
 
-      });
+
+      /* Fade out */
+
+      startScreen.classList.add("hidden");
+
+    }
+
+
+    startScreen.addEventListener(
+      "click",
+      enterSite
+    );
 
 
     /* =========================================
@@ -1003,13 +1067,12 @@
 
             musicStatus.textContent = "ON";
 
-            musicToggle.textContent = "♫ MUSIC ON";
+            musicToggle.textContent =
+              "♫ MUSIC ON";
 
           } catch (error) {
 
-            console.log(
-              "Music could not be played."
-            );
+            console.log("Music could not play.");
 
           }
 
@@ -1019,7 +1082,8 @@
 
           musicStatus.textContent = "OFF";
 
-          musicToggle.textContent = "♫ PLAY MUSIC";
+          musicToggle.textContent =
+            "♫ PLAY MUSIC";
 
         }
 
@@ -1028,8 +1092,7 @@
 
 
     /* =========================================
-       VIDEO MUTE
-       Video stays muted no matter what.
+       VIDEO ALWAYS MUTED
     ========================================= */
 
     videoMute.addEventListener(
@@ -1037,10 +1100,10 @@
       function () {
 
         video.muted = true;
-
         video.volume = 0;
 
-        videoMute.textContent = "VIDEO MUTED";
+        videoMute.textContent =
+          "VIDEO MUTED";
 
       }
     );
@@ -1054,7 +1117,9 @@
       "pause",
       function () {
 
-        video.play().catch(() => {});
+        if (started) {
+          video.play().catch(() => {});
+        }
 
       }
     );
