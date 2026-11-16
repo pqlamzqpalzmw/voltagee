@@ -14,7 +14,6 @@
   const cover = document.querySelector('#music-cover');
   const volume = document.querySelector('#music-volume');
   const state = document.querySelector('#music-state');
-  const themeButton = document.querySelector('#theme-toggle');
   let current = 0;
   let started = false;
 
@@ -40,8 +39,8 @@
       started = true;
       renderMusicUI();
     } catch (error) {
-      if (state) state.textContent = 'TAP TO PLAY';
-      console.warn('Music playback could not start:', error);
+      if (state) state.textContent = 'TAP TO START';
+      console.info('Your browser requires a user gesture before audio can play.');
     }
   }
   function changeTrack(step) {
@@ -55,6 +54,17 @@
     audio.addEventListener('pause', renderMusicUI);
     audio.addEventListener('error', renderMusicUI);
     loadTrack(0);
+    // Try autoplay. Browsers may block audible autoplay until the visitor interacts.
+    playMusic();
+    const startOnFirstGesture = () => {
+      if (!started) playMusic();
+      if (started) {
+        document.removeEventListener('pointerdown', startOnFirstGesture);
+        document.removeEventListener('keydown', startOnFirstGesture);
+      }
+    };
+    document.addEventListener('pointerdown', startOnFirstGesture);
+    document.addEventListener('keydown', startOnFirstGesture);
   }
   toggle?.addEventListener('click', () => {
     if (!audio) return;
@@ -65,8 +75,8 @@
   prev?.addEventListener('click', () => changeTrack(-1));
   volume?.addEventListener('input', () => { if (audio) audio.volume = Number(volume.value); });
 
-  // The theme preference is shared across every page on this site.
   const themeKey = 'voltage-minecraft-theme';
+  const themeButton = document.querySelector('#theme-toggle');
   function applyTheme(enabled) {
     document.body.classList.toggle('minecraft-theme', enabled);
     if (themeButton) {
@@ -83,14 +93,54 @@
     try { localStorage.setItem(themeKey, String(minecraftEnabled)); } catch (_) {}
   });
 
-  document.querySelector('.menu-toggle')?.addEventListener('click', () => {
-    const links = document.querySelector('.nav-links');
-    const open = links.classList.toggle('open');
-    document.querySelector('.menu-toggle').setAttribute('aria-expanded', String(open));
+  function setupPage() {
+    const menuButton = document.querySelector('.menu-toggle');
+    menuButton?.addEventListener('click', () => {
+      const links = document.querySelector('.nav-links');
+      const open = links.classList.toggle('open');
+      menuButton.setAttribute('aria-expanded', String(open));
+    });
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      if (link.pathname.split('/').pop() === location.pathname.split('/').pop()) link.setAttribute('aria-current', 'page');
+    });
+    document.querySelectorAll('[data-year]').forEach(node => node.textContent = new Date().getFullYear());
+    applyTheme(minecraftEnabled);
+  }
+  setupPage();
+
+  // Swap page content without reloading the document, keeping the same audio element alive.
+  async function navigate(url, addHistory = true) {
+    const target = new URL(url, location.href);
+    if (target.origin !== location.origin || !/\.html$/.test(target.pathname)) return;
+    try {
+      const response = await fetch(target.href);
+      if (!response.ok) throw new Error('Page could not be loaded');
+      const html = await response.text();
+      const nextDoc = new DOMParser().parseFromString(html, 'text/html');
+      for (const selector of ['.site-header', 'main', '.site-footer', '#theme-toggle']) {
+        const currentNode = document.querySelector(selector);
+        const nextNode = nextDoc.querySelector(selector);
+        if (currentNode && nextNode) currentNode.replaceWith(nextNode);
+      }
+      document.title = nextDoc.title;
+      if (addHistory) history.pushState({}, '', target.href);
+      setupPage();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    } catch (error) {
+      location.href = target.href;
+    }
+  }
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href]');
+    if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank' || link.hasAttribute('download')) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin === location.origin && /\.html$/.test(url.pathname)) {
+      event.preventDefault();
+      navigate(url.href);
+    }
   });
-  document.querySelectorAll('.nav-links a').forEach(link => {
-    if (link.pathname.split('/').pop() === location.pathname.split('/').pop()) link.setAttribute('aria-current', 'page');
-  });
+  window.addEventListener('popstate', () => navigate(location.href, false));
+
   const cursor = document.querySelector('.custom-cursor');
   if (cursor && matchMedia('(pointer:fine)').matches) {
     document.addEventListener('mousemove', event => {
@@ -98,5 +148,4 @@
       cursor.style.top = event.clientY + 'px';
     });
   } else document.body.classList.add('no-cursor');
-  document.querySelectorAll('[data-year]').forEach(node => node.textContent = new Date().getFullYear());
 })();
