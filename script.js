@@ -14,39 +14,75 @@
   const cover = document.querySelector('#music-cover');
   const volume = document.querySelector('#music-volume');
   const state = document.querySelector('#music-state');
+  const themeButton = document.querySelector('#theme-toggle');
   let current = 0;
   let started = false;
-  function render() {
-    const song = songs[current];
+
+  function renderMusicUI() {
     if (!audio) return;
+    if (toggle) toggle.textContent = audio.paused ? '▶' : 'Ⅱ';
+    if (state) state.textContent = audio.error ? 'UNAVAILABLE' : (audio.paused ? 'PAUSED' : 'PLAYING');
+  }
+  function loadTrack(index) {
+    current = (index + songs.length) % songs.length;
+    const song = songs[current];
     audio.src = song.src;
+    audio.load();
     if (title) title.textContent = song.title;
     if (artist) artist.textContent = song.artist;
     if (cover) cover.src = song.cover;
-    if (toggle) toggle.textContent = audio.paused ? '▶' : 'Ⅱ';
-    if (state) state.textContent = audio.paused ? 'PAUSED' : 'PLAYING';
+    renderMusicUI();
   }
-  async function play() {
+  async function playMusic() {
     if (!audio) return;
-    try { await audio.play(); started = true; } catch (error) { if (state) state.textContent = 'TAP TO PLAY'; }
-    render();
+    try {
+      await audio.play();
+      started = true;
+      renderMusicUI();
+    } catch (error) {
+      if (state) state.textContent = 'TAP TO PLAY';
+      console.warn('Music playback could not start:', error);
+    }
   }
-  function change(step) {
-    current = (current + step + songs.length) % songs.length;
-    render();
-    if (started) play();
+  function changeTrack(step) {
+    loadTrack(current + step);
+    if (started) playMusic();
   }
   if (audio) {
     audio.volume = 0.22;
-    render();
-    audio.addEventListener('ended', () => change(1));
-    audio.addEventListener('play', render);
-    audio.addEventListener('pause', render);
+    audio.addEventListener('ended', () => changeTrack(1));
+    audio.addEventListener('play', renderMusicUI);
+    audio.addEventListener('pause', renderMusicUI);
+    audio.addEventListener('error', renderMusicUI);
+    loadTrack(0);
   }
-  toggle?.addEventListener('click', () => audio.paused ? play() : audio.pause());
-  next?.addEventListener('click', () => change(1));
-  prev?.addEventListener('click', () => change(-1));
-  volume?.addEventListener('input', () => { audio.volume = Number(volume.value); });
+  toggle?.addEventListener('click', () => {
+    if (!audio) return;
+    if (audio.paused) playMusic();
+    else audio.pause();
+  });
+  next?.addEventListener('click', () => changeTrack(1));
+  prev?.addEventListener('click', () => changeTrack(-1));
+  volume?.addEventListener('input', () => { if (audio) audio.volume = Number(volume.value); });
+
+  // The theme preference is shared across every page on this site.
+  const themeKey = 'voltage-minecraft-theme';
+  function applyTheme(enabled) {
+    document.body.classList.toggle('minecraft-theme', enabled);
+    if (themeButton) {
+      themeButton.textContent = enabled ? 'MINECRAFT MODE: ON' : 'MINECRAFT MODE: OFF';
+      themeButton.setAttribute('aria-pressed', String(enabled));
+    }
+  }
+  let minecraftEnabled = false;
+  try { minecraftEnabled = localStorage.getItem(themeKey) === 'true'; } catch (_) {}
+  applyTheme(minecraftEnabled);
+  themeButton?.addEventListener('click', () => {
+    minecraftEnabled = !document.body.classList.contains('minecraft-theme');
+    applyTheme(minecraftEnabled);
+    try { localStorage.setItem(themeKey, String(minecraftEnabled)); } catch (_) {}
+  });
+
   document.querySelector('.menu-toggle')?.addEventListener('click', () => {
     const links = document.querySelector('.nav-links');
     const open = links.classList.toggle('open');
