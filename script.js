@@ -76,18 +76,19 @@
   volume?.addEventListener('input', () => { if (audio) audio.volume = Number(volume.value); });
 
   const themeKey = 'voltage-minecraft-theme';
-  const themeButton = document.querySelector('#theme-toggle');
   function applyTheme(enabled) {
     document.body.classList.toggle('minecraft-theme', enabled);
-    if (themeButton) {
-      themeButton.textContent = enabled ? 'MINECRAFT MODE: ON' : 'MINECRAFT MODE: OFF';
-      themeButton.setAttribute('aria-pressed', String(enabled));
+    const button = document.querySelector('#theme-toggle');
+    if (button) {
+      button.textContent = enabled ? 'MINECRAFT MODE: ON' : 'MINECRAFT MODE: OFF';
+      button.setAttribute('aria-pressed', String(enabled));
     }
   }
   let minecraftEnabled = false;
   try { minecraftEnabled = localStorage.getItem(themeKey) === 'true'; } catch (_) {}
   applyTheme(minecraftEnabled);
-  themeButton?.addEventListener('click', () => {
+  document.addEventListener('click', event => {
+    if (!event.target.closest('#theme-toggle')) return;
     minecraftEnabled = !document.body.classList.contains('minecraft-theme');
     applyTheme(minecraftEnabled);
     try { localStorage.setItem(themeKey, String(minecraftEnabled)); } catch (_) {}
