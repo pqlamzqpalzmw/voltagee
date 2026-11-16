@@ -1,0 +1,8 @@
+{
+  "name": "voltagee",
+  "version": "1.0.0",
+  "description": "Voltage — online communities, digital projects and creative work",
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  }
+}

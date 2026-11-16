@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# Package manager
+.pnp
+.pnp.js
+
+# Misc
+.DS_Store
+*.log
