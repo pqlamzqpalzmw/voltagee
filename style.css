@@ -209,3 +209,88 @@ body:not(.minecraft-theme) .site-footer {
     transition: transform .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease;
   }
 }
+
+
+/* Keep music controls distinct and prevent the previous/next buttons from collapsing */
+body:not(.minecraft-theme) .music-player {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  max-width: calc(100vw - 36px);
+  min-width: 0;
+}
+body:not(.minecraft-theme) .music-cover {
+  flex: 0 0 38px;
+}
+body:not(.minecraft-theme) .music-meta {
+  flex: 1 1 120px;
+  min-width: 0;
+}
+body:not(.minecraft-theme) .music-controls {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  gap: 3px;
+  white-space: nowrap;
+}
+body:not(.minecraft-theme) .music-controls button {
+  flex: 0 0 31px;
+  width: 31px;
+  min-width: 31px;
+  height: 31px;
+  padding: 0;
+  line-height: 1;
+  white-space: nowrap;
+}
+body:not(.minecraft-theme) .music-volume {
+  flex: 0 0 65px;
+}
+body.minecraft-theme .music-player {
+  display: flex;
+  flex-wrap: nowrap;
+  max-width: calc(100vw - 36px);
+}
+body.minecraft-theme .music-controls {
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+body.minecraft-theme .music-controls button {
+  flex: 0 0 30px;
+  min-width: 30px;
+  padding: 5px;
+}
+@media (max-width:600px) {
+  body:not(.minecraft-theme) .music-player {
+    gap: 6px;
+    padding: 8px 9px;
+  }
+  body:not(.minecraft-theme) .music-cover {
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+  }
+  body:not(.minecraft-theme) .music-meta {
+    flex: 1 1 76px;
+    min-width: 64px;
+    max-width: 105px;
+  }
+  body:not(.minecraft-theme) .music-controls {
+    gap: 1px;
+  }
+  body:not(.minecraft-theme) .music-controls button {
+    flex-basis: 28px;
+    width: 28px;
+    min-width: 28px;
+    height: 30px;
+  }
+  body.minecraft-theme .music-player {
+    gap: 5px;
+    padding: 7px;
+  }
+  body.minecraft-theme .music-controls button {
+    flex-basis: 27px;
+    min-width: 27px;
+    padding: 4px;
+  }
+}
