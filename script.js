@@ -3,7 +3,8 @@
     { title: 'STAY HERE 4 LIFE', artist: 'A$AP ROCKY', src: 'assets/music/stayhere.mp3', cover: 'assets/music/cover1.jpg' },
     { title: 'Passionfruit', artist: 'Drake', src: 'assets/music/passionfruit.mp3', cover: 'assets/music/cover2.jpg' },
     { title: 'Headlines', artist: 'Drake', src: 'assets/music/headlines.mp3', cover: 'assets/music/cover3.jpg' },
-    { title: 'Wet Hands', artist: 'C418', src: 'assets/music/Wet Hands.mp3', cover: 'assets/music/cover1.jpg' }
+    { title: 'Wet Hands', artist: 'C418', src: 'assets/music/Wet Hands.mp3', cover: 'assets/music/cover1.jpg' },
+    { title: 'Love Blur', artist: 'slayr', src: 'assets/music/Love Blur - slayr.mp3', cover: 'assets/music/cover4.jpg' }
   ];
   const audio = document.querySelector('#music-audio');
   const toggle = document.querySelector('#music-toggle');
