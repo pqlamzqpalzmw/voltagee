@@ -76,23 +76,27 @@
   prev?.addEventListener('click', () => changeTrack(-1));
   volume?.addEventListener('input', () => { if (audio) audio.volume = Number(volume.value); });
 
-  const themeKey = 'voltage-minecraft-theme';
-  function applyTheme(enabled) {
-    document.body.classList.toggle('minecraft-theme', enabled);
+  const themeKey = 'voltage-wimpy-kid-theme';
+  let currentTheme = 'dark';
+  function applyTheme(theme) {
+    currentTheme = theme === 'light' ? 'light' : 'dark';
+    document.body.classList.toggle('wimpy-light', currentTheme === 'light');
+    document.body.classList.toggle('wimpy-dark', currentTheme === 'dark');
     const button = document.querySelector('#theme-toggle');
     if (button) {
-      button.textContent = enabled ? 'MINECRAFT MODE: ON' : 'MINECRAFT MODE: OFF';
-      button.setAttribute('aria-pressed', String(enabled));
+      button.textContent = currentTheme === 'dark' ? '☀ LIGHT MODE' : '☾ DARK MODE';
+      button.setAttribute('aria-label', currentTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+      button.setAttribute('aria-pressed', String(currentTheme === 'dark'));
     }
   }
-  let minecraftEnabled = false;
-  try { minecraftEnabled = localStorage.getItem(themeKey) === 'true'; } catch (_) {}
-  applyTheme(minecraftEnabled);
+  try {
+    currentTheme = localStorage.getItem(themeKey) || 'dark';
+  } catch (_) {}
+  applyTheme(currentTheme);
   document.addEventListener('click', event => {
     if (!event.target.closest('#theme-toggle')) return;
-    minecraftEnabled = !document.body.classList.contains('minecraft-theme');
-    applyTheme(minecraftEnabled);
-    try { localStorage.setItem(themeKey, String(minecraftEnabled)); } catch (_) {}
+    applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    try { localStorage.setItem(themeKey, currentTheme); } catch (_) {}
   });
 
   function setupPage() {
@@ -106,7 +110,13 @@
       if (link.pathname.split('/').pop() === location.pathname.split('/').pop()) link.setAttribute('aria-current', 'page');
     });
     document.querySelectorAll('[data-year]').forEach(node => node.textContent = new Date().getFullYear());
-    applyTheme(minecraftEnabled);
+    applyTheme(currentTheme);
+    const page = document.querySelector('main');
+    if (page) {
+      page.classList.remove('notebook-page-in');
+      void page.offsetWidth;
+      page.classList.add('notebook-page-in');
+    }
   }
   setupPage();
 
