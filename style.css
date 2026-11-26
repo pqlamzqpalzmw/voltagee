@@ -294,3 +294,9 @@ body.minecraft-theme .music-controls button {
     padding: 4px;
   }
 }
+
+
+/* Discreet owner access link */
+.footer-links .owner-link{opacity:.38;font-size:10px;letter-spacing:.2px;transition:opacity .2s ease,color .2s ease}
+.footer-links .owner-link:hover,.footer-links .owner-link:focus-visible{opacity:1;color:#fff}
+body.minecraft-theme .footer-links .owner-link:hover,body.minecraft-theme .footer-links .owner-link:focus-visible{color:#c8e49b}
