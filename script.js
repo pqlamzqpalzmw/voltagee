@@ -143,6 +143,70 @@
   });
   window.addEventListener('popstate', () => navigate(location.href, false));
 
+
+  // Custom Voltage support panel powered by Tawk.to.
+  const support = document.createElement('section');
+  support.className = 'support-widget';
+  support.innerHTML = `
+    <div class="support-panel" id="support-panel" hidden>
+      <div class="support-panel-head">
+        <div><span class="support-kicker">VOLTAGE SUPPORT</span><strong>How can I help?</strong></div>
+        <button class="support-close" type="button" aria-label="Close support panel">×</button>
+      </div>
+      <p>Have a question or want to talk about a project?</p>
+      <a class="support-option support-discord" href="https://discordapp.com/users/924463055906160680" target="_blank" rel="noopener noreferrer"><span class="support-option-icon">↗</span><span><strong>Contact on Discord</strong><small>Send me a direct message</small></span></a>
+      <button class="support-option support-live" type="button"><span class="support-option-icon">◌</span><span><strong>Start live chat</strong><small>Message me through the website</small></span></button>
+      <div class="support-foot">Usually replies as soon as possible</div>
+    </div>
+    <button class="support-prompt" type="button" aria-expanded="false" aria-controls="support-panel">
+      <span class="support-status-dot"></span><span>Any more questions?</span><span class="support-prompt-arrow">↗</span>
+    </button>`;
+  document.body.appendChild(support);
+  const supportPanel = support.querySelector('#support-panel');
+  const supportPrompt = support.querySelector('.support-prompt');
+  const supportClose = support.querySelector('.support-close');
+  let tawkReady = false;
+  let openChatWhenReady = false;
+  function openTawkChat() {
+    if (!tawkReady || !window.Tawk_API || typeof window.Tawk_API.maximize !== 'function') {
+      openChatWhenReady = true;
+      const liveText = support.querySelector('.support-live small');
+      if (liveText) liveText.textContent = 'Connecting to live chat…';
+      return;
+    }
+    window.Tawk_API.showWidget();
+    window.Tawk_API.maximize();
+    supportPanel.hidden = true;
+    supportPrompt.setAttribute('aria-expanded', 'false');
+  }
+  supportPrompt.addEventListener('click', () => {
+    supportPanel.hidden = !supportPanel.hidden;
+    supportPrompt.setAttribute('aria-expanded', String(!supportPanel.hidden));
+  });
+  supportClose.addEventListener('click', () => {
+    supportPanel.hidden = true;
+    supportPrompt.setAttribute('aria-expanded', 'false');
+  });
+  support.querySelector('.support-live').addEventListener('click', openTawkChat);
+
+  // Load the normal Tawk widget, but keep its default launcher hidden.
+  window.Tawk_API = window.Tawk_API || {};
+  window.Tawk_API.onLoad = function () {
+    tawkReady = true;
+    window.Tawk_API.hideWidget();
+    if (openChatWhenReady) openTawkChat();
+  };
+  window.Tawk_LoadStart = new Date();
+  (function () {
+    const firstScript = document.getElementsByTagName('script')[0];
+    const tawkScript = document.createElement('script');
+    tawkScript.async = true;
+    tawkScript.src = 'https://embed.tawk.to/62fc3a0437898912e9636a94/1k8f669fb';
+    tawkScript.charset = 'UTF-8';
+    tawkScript.setAttribute('crossorigin', '*');
+    firstScript.parentNode.insertBefore(tawkScript, firstScript);
+  })();
+
   const cursor = document.querySelector('.custom-cursor');
   if (cursor && matchMedia('(pointer:fine)').matches) {
     document.addEventListener('mousemove', event => {
