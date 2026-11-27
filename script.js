@@ -149,17 +149,14 @@
   support.className = 'support-widget';
   support.innerHTML = `
     <div class="support-panel" id="support-panel" hidden>
-      <div class="support-panel-head">
-        <div><span class="support-kicker">VOLTAGE SUPPORT</span><strong>How can I help?</strong></div>
-        <button class="support-close" type="button" aria-label="Close support panel">×</button>
-      </div>
-      <p>Have a question or want to talk about a project?</p>
-      <a class="support-option support-discord" href="https://discordapp.com/users/924463055906160680" target="_blank" rel="noopener noreferrer"><span class="support-option-icon">↗</span><span><strong>Contact on Discord</strong><small>Send me a direct message</small></span></a>
-      <button class="support-option support-live" type="button"><span class="support-option-icon">◌</span><span><strong>Start live chat</strong><small>Message me through the website</small></span></button>
-      <div class="support-foot">Usually replies as soon as possible</div>
+      <div class="support-topline"><span class="support-brand-mark">V</span><span class="support-kicker">VOLTAGE <i></i> SUPPORT</span><button class="support-close" type="button" aria-label="Close support panel">×</button></div>
+      <div class="support-intro"><span class="support-eyebrow">NEED A HAND?</span><strong>Let's talk.</strong><p>Questions, ideas, or just want to get in touch? Pick whichever works for you.</p></div>
+      <button class="support-option support-live" type="button"><span class="support-option-icon support-chat-icon">↗</span><span><strong>Start a live chat</strong><small>Talk with me right here</small></span><span class="support-option-chevron">→</span></button>
+      <a class="support-option support-discord" href="https://discordapp.com/users/924463055906160680" target="_blank" rel="noopener noreferrer"><span class="support-option-icon support-discord-icon">⌁</span><span><strong>Message on Discord</strong><small>Open a direct message</small></span><span class="support-option-chevron">↗</span></a>
+      <div class="support-foot"><span class="support-foot-line"></span>I'll get back to you as soon as I can<span class="support-foot-line"></span></div>
     </div>
     <button class="support-prompt" type="button" aria-expanded="false" aria-controls="support-panel">
-      <span class="support-status-dot"></span><span>Any more questions?</span><span class="support-prompt-arrow">↗</span>
+      <span class="support-prompt-mark">V</span><span class="support-prompt-label"><strong>Any more questions?</strong><small>We're here to help</small></span><span class="support-prompt-arrow">↗</span>
     </button>`;
   document.body.appendChild(support);
   const supportPanel = support.querySelector('#support-panel');
