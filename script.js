@@ -1,5 +1,6 @@
 (() => {
   const songs = [
+    { title: 'ringtxne girl', artist: 'spawncamped vault', src: 'assets/music/ringtxne grl - Release.mp3', cover: 'assets/music/IMG_7639.jpeg' },
     { title: 'STAY HERE 4 LIFE', artist: 'A$AP ROCKY', src: 'assets/music/stayhere.mp3', cover: 'assets/music/cover1.jpg' },
     { title: 'Passionfruit', artist: 'Drake', src: 'assets/music/passionfruit.mp3', cover: 'assets/music/cover2.jpg' },
     { title: 'Headlines', artist: 'Drake', src: 'assets/music/headlines.mp3', cover: 'assets/music/cover3.jpg' },
